@@ -1,0 +1,251 @@
+:root {
+  --light-bg: #f8f9fa;
+  --dark-bg: #1a1a1a;
+  --text-color-light: #2c3e50;
+  --text-color-dark: #ecf0f1;
+  --highlight-color: #3498db;
+  --button-bg-light: rgba(236, 240, 241, 0.1);
+  --button-bg-dark: rgba(52, 152, 219, 0.1);
+  --button-border-light: rgba(236, 240, 241, 0.3);
+  --button-border-dark: rgba(52, 152, 219, 0.3);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: var(--dark-bg);
+  color: var(--text-color-dark);
+  transition: all 0.5s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+body.light-mode-active {
+  background: var(--light-bg);
+  color: var(--text-color-light);
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    45deg,
+    rgba(52, 152, 219, 0.05),
+    rgba(52, 152, 219, 0)
+  );
+  z-index: -1;
+}
+
+.container {
+  text-align: center;
+  padding: 2rem;
+  position: relative;
+}
+
+.title-container {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 3.5em;
+  font-weight: 700;
+  position: relative;
+  z-index: 1;
+}
+
+.highlight {
+  display: inline-block;
+  background: linear-gradient(360deg, var(--highlight-color), #fecd0b);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: textFloat 3s ease-in-out infinite;
+}
+
+.highlight::before {
+  content: attr(data-text);
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+  background: linear-gradient(120deg, var(--highlight-color), #2980b9);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  opacity: 0.3;
+  filter: blur(8px);
+  animation: textGlow 3s ease-in-out infinite;
+}
+
+@keyframes textFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes textGlow {
+  0%,
+  100% {
+    opacity: 0.3;
+    filter: blur(8px);
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    filter: blur(16px);
+    transform: scale(1.05);
+  }
+}
+
+.dark-mode {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  padding: 12px 24px;
+  background: var(--button-bg-dark);
+  color: var(--text-color-dark);
+  border: 1px solid var(--button-border-dark);
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  backdrop-filter: blur(5px);
+}
+
+.dark-mode:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode-active .dark-mode {
+  background: var(--button-bg-light);
+  color: var(--text-color-light);
+  border-color: var(--button-border-light);
+}
+
+.message {
+  font-size: 1.5em;
+  margin: 1.5rem 0;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.contact-link {
+  color: var(--highlight-color);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.contact-link::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  bottom: -2px;
+  left: 0;
+  background: var(--highlight-color);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.contact-link:hover::after {
+  transform: scaleX(1);
+}
+
+.separator {
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--text-color-dark),
+    transparent
+  );
+  margin: 2rem auto;
+  opacity: 0.2;
+}
+
+body.light-mode-active .separator {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--text-color-light),
+    transparent
+  );
+}
+
+.footer-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(5px);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  font-size: 0.85rem;
+  color: var(--text-color-dark);
+  transition: all 0.3s ease;
+}
+
+body.light-mode-active .footer-container {
+  background: rgba(255, 255, 255, 0.1);
+  border-top-color: rgba(255, 255, 255, 0.1);
+  color: var(--text-color-light);
+}
+
+.footer-links {
+  display: flex;
+  gap: 2rem;
+}
+
+.footer-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+  color: var(--highlight-color);
+}
+
+.footer-separator {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+body.light-mode-active .footer-separator {
+  color: rgba(0, 0, 0, 0.3);
+}
