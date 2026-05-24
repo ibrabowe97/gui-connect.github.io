@@ -3,29 +3,100 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GUI CONNECT | Partenaires</title>
+    <title data-i18n-key="titlePartners">GUI CONNECT | Partenaires</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
-    <button class="dark-mode" onclick="toggleDarkMode()">Mode Clair</button>
     <header class="site-header">
       <div class="brand">GUI CONNECT</div>
-      <nav class="site-nav">
-        <a href="index.html">Accueil</a>
-        <a href="services.html">Services</a>
-        <a href="about.html">À propos</a>
-        <a href="partners.html" class="active">Partenaires</a>
-        <a href="contact.html">Contact</a>
+      <nav class="site-nav" id="primary-nav" aria-label="Navigation principale">
+        <a href="index.html" id="nav-home" data-i18n-key="navHome">Accueil</a>
+        <a href="services.html" id="nav-services" data-i18n-key="navServices"
+          >Services</a
+        >
+        <a href="resources.html" id="nav-resources" data-i18n-key="navResources"
+          >Ressources</a
+        >
+        <a
+          href="partners.html"
+          class="active"
+          id="nav-partners"
+          data-i18n-key="navPartners"
+          >Partenaires</a
+        >
+        <a href="about.html" id="nav-about" data-i18n-key="navAbout"
+          >À propos</a
+        >
       </nav>
+      <div class="header-controls">
+        <a href="contact.html" class="header-cta" data-i18n-key="navContact"
+          >Contact</a
+        >
+        <div class="lang-switch">
+          <button
+            type="button"
+            class="lang-btn active"
+            data-lang="fr"
+            aria-pressed="true"
+            onclick="switchLanguage('fr')"
+          >
+            FR
+          </button>
+          <button
+            type="button"
+            class="lang-btn"
+            data-lang="en"
+            aria-pressed="false"
+            onclick="switchLanguage('en')"
+          >
+            EN
+          </button>
+        </div>
+        <button
+          class="lang-toggle"
+          type="button"
+          onclick="toggleLanguage()"
+          aria-label="Changer de langue"
+          title="Changer de langue"
+        >
+          <span class="control-icon lang-icon" aria-hidden="true"></span>
+          <span class="lang-toggle-label">FR</span>
+        </button>
+        <button
+          class="theme-toggle"
+          type="button"
+          onclick="toggleDarkMode()"
+          aria-label="Mode Clair"
+        >
+          <span class="control-icon theme-icon" aria-hidden="true"></span>
+          <span class="theme-toggle-label">Mode Clair</span>
+        </button>
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-controls="primary-nav"
+          aria-expanded="false"
+          aria-label="Ouvrir le menu"
+        >
+          <span class="nav-toggle-bar" aria-hidden="true"></span>
+          <span class="nav-toggle-bar" aria-hidden="true"></span>
+          <span class="nav-toggle-bar" aria-hidden="true"></span>
+        </button>
+      </div>
+      <a href="contact.html" class="mobile-menu-cta" data-i18n-key="navContact"
+        >Contact</a
+      >
     </header>
 
     <main>
       <section class="section page-hero">
         <div class="section-header">
-          <span>Partenaires</span>
-          <h1>Nos collaborations et intégrations.</h1>
+          <span data-i18n-key="partnersEyebrow">Partenaires</span>
+          <h1 data-i18n-key="partnersHeroTitle">
+            Nos collaborations et intégrations.
+          </h1>
         </div>
-        <p class="page-lead">
+        <p class="page-lead" data-i18n-key="partnersLead">
           Nous travaillons avec des fournisseurs techniques et des partenaires
           locaux pour assurer la meilleure qualité de service.
         </p>
@@ -34,24 +105,27 @@
       <section class="section partners-grid">
         <article class="partner-card">
           <h3>Railway</h3>
-          <p>
+          <p data-i18n-key="partnersRailwayText">
             Hébergement rapide pour prototypage et déploiement d'applications.
           </p>
         </article>
         <article class="partner-card">
           <h3>Hetzner</h3>
-          <p>Infrastructure cloud et serveurs performants à coût maîtrisé.</p>
+          <p data-i18n-key="partnersHetznerText">
+            Infrastructure dans le nuage et serveurs performants à coût
+            maîtrisé.
+          </p>
         </article>
         <article class="partner-card">
           <h3>AWS</h3>
-          <p>
+          <p data-i18n-key="partnersAwsText">
             Services managés, scalabilité et résilience pour les projets
             critiques.
           </p>
         </article>
         <article class="partner-card">
           <h3>Brevo</h3>
-          <p>
+          <p data-i18n-key="partnersBrevoText">
             Communication multicanale pour emails, WhatsApp, SMS et
             notifications.
           </p>
@@ -60,8 +134,168 @@
     </main>
 
     <footer class="footer">
-      <div>GUI CONNECT — IT, web et mobile</div>
-      <a class="footer-link" href="contact.html">contactus@gui-connect.com</a>
+      <section class="footer-projects" aria-labelledby="footer-projects-title">
+        <div class="footer-projects-header">
+          <span data-i18n-key="footerProjectsEyebrow">Réalisations</span>
+          <h2 id="footer-projects-title" data-i18n-key="footerProjectsTitle">
+            Projets accomplis
+          </h2>
+          <p data-i18n-key="footerProjectsLead">
+            Une sélection de plateformes livrées ou accompagnées, avec leur
+            objectif, infrastructure et socle technique.
+          </p>
+        </div>
+
+        <div class="footer-project-grid">
+          <article class="footer-project-card">
+            <a
+              class="footer-project-name"
+              href="https://aeesgs.org/"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i18n-key="footerProjectAeesgsName"
+              >AEESGS</a
+            >
+            <dl>
+              <div>
+                <dt data-i18n-key="footerProjectGoalLabel">Objectif</dt>
+                <dd data-i18n-key="footerProjectAeesgsGoal">
+                  Plateforme communautaire pour recenser les élèves, étudiants
+                  et stagiaires guinéens au Sénégal, faciliter la communication
+                  et coordonner les activités.
+                </dd>
+              </div>
+              <div>
+                <dt data-i18n-key="footerProjectInfraLabel">Infrastructure</dt>
+                <dd data-i18n-key="footerProjectAeesgsInfra">
+                  Hébergement mutualisé Namecheap.
+                </dd>
+              </div>
+              <div>
+                <dt data-i18n-key="footerProjectStackLabel">
+                  Stack technique
+                </dt>
+                <dd data-i18n-key="footerProjectAeesgsStack">
+                  PHP vanilla, Bootstrap, MySQL.
+                </dd>
+              </div>
+            </dl>
+          </article>
+
+          <article class="footer-project-card">
+            <a
+              class="footer-project-name"
+              href="https://budget.gui-connect.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i18n-key="footerProjectBudgetName"
+              >GUI Budget</a
+            >
+            <dl>
+              <div>
+                <dt data-i18n-key="footerProjectGoalLabel">Objectif</dt>
+                <dd data-i18n-key="footerProjectBudgetGoal">
+                  Application de suivi budgétaire pour organiser les revenus,
+                  dépenses et décisions financières au quotidien.
+                </dd>
+              </div>
+              <div>
+                <dt data-i18n-key="footerProjectInfraLabel">Infrastructure</dt>
+                <dd data-i18n-key="footerProjectBudgetInfra">
+                  Application déployée sur Railway avec base PostgreSQL hébergée
+                  sur Neon.
+                </dd>
+              </div>
+              <div>
+                <dt data-i18n-key="footerProjectStackLabel">
+                  Stack technique
+                </dt>
+                <dd data-i18n-key="footerProjectBudgetStack">
+                  Laravel, Inertia, PostgreSQL.
+                </dd>
+              </div>
+            </dl>
+          </article>
+
+          <article class="footer-project-card">
+            <a
+              class="footer-project-name"
+              href="https://www.cashminute.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i18n-key="footerProjectCashminuteName"
+              >CashMinute</a
+            >
+            <dl>
+              <div>
+                <dt data-i18n-key="footerProjectGoalLabel">Objectif</dt>
+                <dd data-i18n-key="footerProjectCashminuteGoal">
+                  Plateforme fintech de transfert d'argent international, avec
+                  parcours web et mobile, canaux de réception et opérations
+                  métier à grande échelle.
+                </dd>
+              </div>
+              <div>
+                <dt data-i18n-key="footerProjectInfraLabel">Infrastructure</dt>
+                <dd data-i18n-key="footerProjectCashminuteInfra">
+                  Infrastructure AWS pour une activité financière à fort volume.
+                </dd>
+              </div>
+              <div>
+                <dt data-i18n-key="footerProjectStackLabel">
+                  Stack technique
+                </dt>
+                <dd data-i18n-key="footerProjectCashminuteStack">
+                  Écosystème fintech web/mobile, workflows transactionnels et
+                  outils opérationnels. Contribution depuis 2022, avec
+                  progression jusqu'au rôle d'IT Manager.
+                </dd>
+              </div>
+            </dl>
+          </article>
+
+          <article class="footer-project-card">
+            <h3 class="footer-project-name" data-i18n-key="footerProjectMoreName">
+              Autres missions
+            </h3>
+            <dl>
+              <div>
+                <dt data-i18n-key="footerProjectGoalLabel">Objectif</dt>
+                <dd data-i18n-key="footerProjectMoreGoal">
+                  Sites, applications, support informatique, messagerie,
+                  domaines, hébergement et accompagnement technique pour des
+                  clients en Afrique et au Royaume-Uni.
+                </dd>
+              </div>
+              <div>
+                <dt data-i18n-key="footerProjectInfraLabel">Infrastructure</dt>
+                <dd data-i18n-key="footerProjectMoreInfra">
+                  Railway, Hetzner, AWS, Namecheap et environnements cloud ou
+                  hébergements adaptés au besoin.
+                </dd>
+              </div>
+              <div>
+                <dt data-i18n-key="footerProjectStackLabel">
+                  Stack technique
+                </dt>
+                <dd data-i18n-key="footerProjectMoreStack">
+                  Laravel, Spring Boot, React, Angular, Docker, PostgreSQL,
+                  Redis, Kafka, Linux, Windows et outils collaboratifs.
+                </dd>
+              </div>
+            </dl>
+          </article>
+        </div>
+      </section>
+
+      <div class="footer-bottom">
+        <div data-i18n-key="footerTagline">
+          GUI CONNECT — informatique, web et mobile
+        </div>
+        <a class="footer-link" href="mailto:contactus@gui-connect.com"
+          >contactus@gui-connect.com</a
+        >
+      </div>
     </footer>
 
     <script src="script.js"></script>
