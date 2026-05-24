@@ -1242,3 +1242,146 @@ body.light-mode-active textarea {
     align-items: flex-start;
   }
 }
+
+
+/* --- FIGMA EDITORIAL REDESIGN OVERRIDES --- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@320;330;340;400;480;540;700&display=swap');
+
+:root {
+  --page-gradient-dark: #000000;
+  --page-gradient-light: #ffffff;
+  --content-surface: #1f1d3d;
+  --content-border: #333333;
+  --content-shadow: none;
+  --glass-bg: transparent;
+  --glass-shadow: none;
+  --glass-border: rgba(255, 255, 255, 0.1);
+}
+
+body.light-mode-active {
+  --content-surface: #ffffff;
+  --content-border: #e6e6e6;
+  --content-shadow: none;
+  --glass-bg: transparent;
+  --glass-border: rgba(0, 0, 0, 0.1);
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Flatten Glassmorphism */
+.stat-card, .spotlight-card, .feature-card, .detail-panel, .story-card, .partner-card, .contact-panel {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+.site-nav, .lang-switch, .theme-toggle, .nav-toggle {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Typography Polish */
+h1 {
+  font-weight: 340;
+  letter-spacing: -0.04em;
+}
+h2, h3 {
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+.eyebrow, .section-header span, .footer-projects-header span {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* Pill Buttons */
+.btn, .header-cta, .mobile-menu-cta {
+  border-radius: 9999px !important;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  box-shadow: none !important;
+}
+
+.btn-primary, .header-cta, .mobile-menu-cta {
+  background: #ffffff !important;
+  color: #000000 !important;
+}
+body.light-mode-active .btn-primary, 
+body.light-mode-active .header-cta, 
+body.light-mode-active .mobile-menu-cta {
+  background: #000000 !important;
+  color: #ffffff !important;
+}
+
+/* Color Blocks */
+.bg-lime { background-color: #dceeb1 !important; }
+.bg-lilac { background-color: #c5b0f4 !important; }
+.bg-cream { background-color: #f4ecd6 !important; }
+.bg-pink { background-color: #efd4d4 !important; }
+.bg-mint { background-color: #c8e6cd !important; }
+.bg-coral { background-color: #f3c9b6 !important; }
+.bg-navy { background-color: #1f1d3d !important; }
+
+.bg-lime *, .bg-lilac *, .bg-cream *, .bg-pink *, .bg-mint *, .bg-coral * {
+  color: #000000 !important;
+}
+.bg-navy * {
+  color: #ffffff !important;
+}
+
+.color-block {
+  border-radius: 24px;
+  padding: clamp(3rem, 6vw, 5rem);
+  margin: 1.5rem auto;
+  border: none !important;
+  width: min(100%, 1180px);
+}
+.hero.color-block {
+  margin-top: 2rem;
+}
+
+.footer-projects {
+  border-radius: 24px;
+  background-color: #1f1d3d !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+.footer-projects * {
+  color: #ffffff !important;
+}
+body.light-mode-active .footer-projects {
+  background-color: #f7f7f5 !important;
+  color: #000000 !important;
+}
+body.light-mode-active .footer-projects * {
+  color: #000000 !important;
+}
+.footer-project-card {
+  background-color: rgba(255,255,255,0.05) !important;
+  border: none !important;
+}
+body.light-mode-active .footer-project-card {
+  background-color: #ffffff !important;
+  border: 1px solid #e6e6e6 !important;
+}
+
+/* Fix Inputs for Editorial Theme */
+input, select, textarea {
+  border: 2px solid var(--content-border) !important;
+  background-color: transparent !important;
+  border-radius: 8px !important;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #000000 !important;
+}
+body:not(.light-mode-active) input:focus, 
+body:not(.light-mode-active) select:focus, 
+body:not(.light-mode-active) textarea:focus {
+  border-color: #ffffff !important;
+}
