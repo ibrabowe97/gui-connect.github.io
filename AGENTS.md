@@ -1,41 +1,40 @@
 # AI Agent Instructions
 
-This repository is a small static multi-page showcase for GUI CONNECT.
+This repository contains the **GUI CONNECT** showcase website and its secure backend bridge.
 
-## What this repo contains
+## Project Architecture
 
-- `index.html` — homepage with hero, value props and navigation
-- `services.html` — service offering details
-- `about.html` — company story, mission and experience
-- `partners.html` — partner and integration overview
-- `contact.html` — standalone contact page with Brevo-ready form
-- `style.css` — shared styling for the entire site
-- `script.js` — shared UI behavior for dark mode and contact form handling
-- `README.md` — short repo description
-- `CNAME` — custom domain configuration for GitHub Pages
+- **Hybrid Model**: 
+  - **Frontend**: Static multi-page site (HTML/CSS/Vanilla JS) served from the root.
+  - **Backend**: Node.js Express API located in `/api` to proxy email requests to Brevo.
+- **Hosting**: Hetzner VPS managed via Coolify.
+  - Frontend: `https://app.gui-connect.com`
+  - Backend API: `https://api.gui-connect.com`
+
+## Core Components
+
+- `index.html`, `services.html`, etc. — Frontend pages.
+- `api/server.js` — Secure Node.js backend for Brevo integration.
+- `style.css` — Shared styling (glassmorphism, dark/light modes).
+- `script.js` — Frontend logic, i18n, and SweetAlert2 integration for form feedback.
+- `favicon.svg` — Brand initials icon.
 
 ## Conventions
 
-- No build system, package manager, or test framework is present.
-- Keep the site static: HTML, CSS, and vanilla JavaScript only.
-- Maintain a professional French presentation with clear bilingual labels where needed.
-- Keep the UI clean, readable, and accessible: black/white base with blue accent buttons.
-- Prefer page separation by use case rather than a single long document.
+- **Internationalization**: Use `data-i18n-key` in HTML. Store all strings in `script.js`.
+- **Styling**: Use CSS variables for theming. Breakpoint is `960px`.
+- **Security**: **NEVER** put API keys in the frontend. Use environment variables in the backend (`BREVO_API_KEY`).
+- **UI/UX**: Use SweetAlert2 for user feedback (alerts, success, loading states).
 
-## Useful notes for changes
+## Development & Testing
 
-- Navigation is managed via separate HTML pages linked in the sticky header.
-- The contact form uses a Brevo placeholder in `script.js` and falls back to `mailto:` when `brevoApiKey` is empty.
-- The main business email is `contactus@gui-connect.com`.
-- Use the existing file structure and keep page content focused on each section's purpose.
+- **Local Preview**: Use a static server (e.g., `python3 -m http.server`) for the frontend.
+- **Backend**: Run `node server.js` inside `/api` with the required env vars.
+- **Verification**: Run `node tests/verify-site.js` to check i18n and structure consistency.
 
-## How to preview
+## Deployment Notes
 
-- Open any HTML file directly in a browser.
-- Or serve the folder with a static server if you want proper relative link behavior.
-
-## When not to do this
-
-- Do not add Node, React, or other frameworks unless the user explicitly requests a migration.
-- Do not introduce backend services in this repository.
-- Do not convert this into a dynamic app unless the user asks for a new architecture.
+- Deploying to Coolify requires two resources from the same repo:
+  1. A **Static Site** for the root `/`.
+  2. A **Node.js** resource for the `/api` directory.
+- DNS is configured with a wildcard `*` pointing to the Hetzner IP.

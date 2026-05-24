@@ -1,99 +1,62 @@
-# GUI CONNECT Website
+# GUI CONNECT Website & API
 
-Static multi-page showcase website for GUI CONNECT, an IT and digital services agency. The site is designed for GitHub Pages and uses plain HTML, CSS, and vanilla JavaScript only.
+Professional showcase website for **GUI CONNECT**, an IT and digital services agency. This project uses a hybrid architecture with a static frontend and a secure Node.js backend.
 
 ## Features
 
-- Responsive multi-page website: home, services, resources, partners, about, and contact.
-- Sticky glass-style header with desktop navigation and a hamburger menu on tablet/mobile.
-- Mobile-friendly icon controls for language and theme switching.
-- French and English UI copy managed from `script.js`.
-- Dark/light theme preference saved in `localStorage`.
-- Contact form with validation, email fallback, and a Brevo-ready integration placeholder.
-- Shared footer project showcase across pages.
-- Static verification script for navigation, i18n keys, responsive rules, and contact copy.
-
-## Pages
-
-- `index.html` - homepage with hero, positioning, calls to action, and service highlights.
-- `services.html` - detailed service offering.
-- `resources.html` - practical resources and guides.
-- `partners.html` - technical partners and integrations.
-- `about.html` - company story, mission, approach, and experience.
-- `contact.html` - contact form for project requests.
+- **Responsive Multi-page Site**: Home, services, resources, partners, about, and contact.
+- **Modern UI**: Sticky glass-style header, dark/light mode, and SweetAlert2 for polished feedback.
+- **Secure Contact Form**: Uses a Node.js backend proxy to communicate with Brevo without exposing API keys.
+- **Internationalization**: Full French and English support managed via `script.js`.
+- **Hybrid Hosting**: Deployed on Hetzner VPS via Coolify.
 
 ## Project Structure
 
 ```text
 .
-├── index.html
-├── services.html
-├── resources.html
-├── partners.html
-├── about.html
-├── contact.html
-├── style.css
-├── script.js
-├── tests/
-│   └── verify-site.js
-├── CNAME
-└── README.md
+├── api/                # Node.js Express backend (Brevo Bridge)
+├── index.html          # Main pages (about, contact, services, etc.)
+├── style.css           # Global glassmorphism styles
+├── script.js           # Frontend logic & i18n
+├── favicon.svg         # Site favicon
+└── tests/              # Static site verification tools
 ```
 
-## Preview Locally
+## Preview & Local Development
 
-Open any HTML file directly in a browser, or run a simple static server:
-
+### Frontend
+Serve the root directory with any static server:
 ```bash
 python3 -m http.server 8000
 ```
 
-Then visit:
-
-```text
-http://localhost:8000
+### Backend
+Navigate to the `/api` directory, install dependencies, and run with your Brevo key:
+```bash
+cd api
+npm install
+BREVO_API_KEY=your_key node server.js
 ```
 
 ## Verification
-
-Run the static site checks:
-
+Run the built-in verification script to ensure i18n keys and navigation are consistent:
 ```bash
 node tests/verify-site.js
 ```
 
-Optional syntax check for the shared JavaScript:
-
-```bash
-node --check script.js
-```
-
-## Contact Form Notes
-
-The form currently keeps the user-facing copy generic: users see `Envoyer` / `Send`, not internal provider names.
-
-`script.js` contains a Brevo-ready placeholder:
-
-```js
-const brevoApiKey = "";
-const brevoSender = "contactus@gui-connect.com";
-```
-
-For production, do not expose a Brevo API key in frontend JavaScript. Use a server-side endpoint or serverless function to receive the form submission, validate it, then call Brevo securely. When `brevoApiKey` is empty, the form falls back to `mailto:contactus@gui-connect.com`.
-
 ## Deployment
 
-The repository is configured for GitHub Pages. The `CNAME` file points the custom domain to:
+The project is hosted on **Hetzner** and managed with **Coolify**.
 
-```text
-gui-connect.com
-```
+- **App URL**: [https://app.gui-connect.com](https://app.gui-connect.com)
+- **API URL**: [https://api.gui-connect.com](https://api.gui-connect.com)
 
-Push changes to the default branch to publish through GitHub Pages.
+Deployment involves creating two resources in Coolify from this repository:
+1. **Static Site**: Base directory `/`.
+2. **Node.js**: Base directory `/api`, with `BREVO_API_KEY`, `BREVO_SENDER`, and `BREVO_RECIPIENT` environment variables.
 
 ## Development Rules
 
-- Keep the site static: no Node build step, React, backend, or framework.
-- Keep page content focused by use case instead of merging everything into one page.
-- Keep client-facing copy professional, clear, and bilingual where needed.
-- Keep provider names such as Brevo out of user-facing contact form copy.
+- **No Hardcoded Text**: Use the i18n system in `script.js` and `data-i18n-key` in HTML.
+- **Security First**: All sensitive logic must stay in the `/api` backend.
+- **Style Consistency**: Adhere to the defined CSS variables and glassmorphism design language.
