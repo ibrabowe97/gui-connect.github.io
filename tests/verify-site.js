@@ -264,6 +264,11 @@ const responsiveRules = [
     pattern:
       /@media\s*\(max-width:\s*960px\)\s*{[\s\S]*\.lang-switch\s*{[\s\S]*display:\s*none;[\s\S]*\.lang-toggle[\s\S]*display:\s*inline-flex;[\s\S]*\.theme-toggle-label[\s\S]*position:\s*absolute;/,
   },
+  {
+    label: "hide the theme icon on desktop and reveal it only in compact header mode",
+    pattern:
+      /\.theme-toggle\s+\.theme-icon\s*{[\s\S]*display:\s*none;[\s\S]*@media\s*\(max-width:\s*960px\)\s*{[\s\S]*\.theme-toggle\s+\.theme-icon\s*{[\s\S]*display:\s*inline-block;/,
+  },
 ];
 
 for (const { label, pattern } of responsiveRules) {
