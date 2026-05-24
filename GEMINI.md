@@ -5,18 +5,21 @@ Instructional context for the **GUI CONNECT** static website. This project is a 
 ## Project Overview
 
 - **Purpose:** Professional showcase for IT services (web, mobile, infrastructure, support).
-- **Architecture:** Static multi-page site (HTML/CSS/JS).
+- **Architecture:** Hybrid (Static Frontend + Node.js Backend Bridge).
 - **Key Technologies:**
-  - **HTML5:** Semantic structure with custom data attributes for i18n (`data-i18n-key`, `data-i18n-placeholder-key`).
-  - **CSS3:** Custom properties (variables), Flexbox, Grid, and a "glassmorphism" aesthetic. Supports dark/light modes.
-  - **Vanilla JavaScript:** Handles internationalization (FR/EN), theme switching, header behavior (auto-hide), and form logic.
+  - **HTML5/CSS3:** Semantic structure and custom styling (glassmorphism).
+  - **Vanilla JavaScript:** Frontend logic and i18n.
+  - **Node.js (Express):** Backend API in `/api` to securely handle email.
 - **i18n:** All UI strings are stored in a `translations` object within `script.js`.
-- **Deployment:** GitHub Pages (custom domain: `gui-connect.com`).
+- **Deployment:** Hetzner VPS via Coolify (Static Site + Node.js Service).
 
 ## Project Structure
 
 ```text
 .
+├── api/                # Backend API (Secure Brevo Bridge)
+│   ├── package.json
+│   └── server.js
 ├── index.html          # Homepage
 ├── services.html       # Detailed service offerings
 ├── about.html          # Company mission and experience
@@ -35,14 +38,28 @@ Instructional context for the **GUI CONNECT** static website. This project is a 
 ## Building and Running
 
 ### Development
-Since this is a static project, no build step is required. You can preview it by opening any HTML file in a browser.
+1. **Frontend:** Open any HTML file or run `python3 -m http.server 8000`.
+2. **Backend:** 
+   ```bash
+   cd api
+   npm install
+   BREVO_API_KEY=your_key node server.js
+   ```
 
-For a local server environment (recommended for correct URL behavior):
-```bash
-# Using Python
-python3 -m http.server 8000
-```
-Then visit `http://localhost:8000`.
+### Deployment (Coolify)
+
+#### 1. Static Frontend
+- Create a **Static Site** resource in Coolify.
+- Set the domain (e.g., `gui-connect.com`).
+
+#### 2. Backend API
+- Create a **Node.js** resource in Coolify.
+- Set the **Base Directory** to `/api`.
+- Set the **Start Command** to `npm start`.
+- Set the domain (e.g., `api.demo.gui-connect.com`).
+- **Environment Variables:**
+  - `BREVO_API_KEY`: Your private Brevo key.
+  - `BREVO_SENDER`: The verified sender email.
 
 ### Testing & Verification
 The project includes a custom verification script that checks for missing i18n keys, nav consistency, and UI rules:
@@ -67,9 +84,9 @@ node --check script.js
 - **Responsive Design:** The site uses a breakpoint at `960px` for mobile/tablet layouts (hamburger menu, compact controls).
 
 ### 3. Contact Form
-- The form has a fallback: if `brevoApiKey` is empty in `script.js`, it uses `mailto:`.
+- The frontend sends data to the Node.js backend (`/api/send-email`).
+- **Security:** The Brevo API key is NEVER exposed on the frontend. It is managed via server-side environment variables.
 - **Privacy:** Client-facing copy must remain professional. Avoid exposing internal provider names (like Brevo) in the UI.
-- **Security:** Never commit API keys to this repository.
 
 ### 4. Page Structure
 - Every page must include the shared sticky header and the "footer project showcase" (`class="footer-projects"`).

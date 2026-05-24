@@ -1,5 +1,4 @@
-const brevoApiKey = "";
-const brevoSender = "contactus@gui-connect.com";
+const API_URL = "https://api.gui-connect.com";
 
 const translations = {
   fr: {
@@ -569,52 +568,16 @@ function handleContact(event) {
     return;
   }
 
-  const emailSubject = `${getTranslation("contactEmailSubject")} - ${data.service}`;
-  const emailLabels = {
-    name: getTranslation("contactNameLabel"),
-    email: "Email",
-    phone: getTranslation("contactPhoneEmailLabel"),
-    service: getTranslation("contactServiceEmailLabel"),
-    message: getTranslation("contactMessageEmailLabel"),
-  };
-
-  if (!brevoApiKey) {
-    alert(getTranslation("contactBrevoMissingAlert"));
-    const subject = encodeURIComponent(emailSubject);
-    const body = encodeURIComponent(
-      `${emailLabels.name}: ${data.name}\n${emailLabels.email}: ${data.email}\n${emailLabels.phone}: ${data.phone}\n${emailLabels.service}: ${data.service}\n${emailLabels.message}:\n${data.message}`,
-    );
-    globalThis.location.href = `mailto:${brevoSender}?subject=${subject}&body=${body}`;
-    return;
-  }
-
-  const htmlContent = [
-    `<h2>${getTranslation("contactEmailSubject")}</h2>`,
-    `<p><strong>${emailLabels.name}:</strong> ${data.name}</p>`,
-    `<p><strong>${emailLabels.email}:</strong> ${data.email}</p>`,
-    `<p><strong>${emailLabels.phone}:</strong> ${data.phone}</p>`,
-    `<p><strong>${emailLabels.service}:</strong> ${data.service}</p>`,
-    `<p><strong>${emailLabels.message}:</strong><br>${data.message.replaceAll("\n", "<br>")}</p>`,
-  ].join("");
-
-  const payload = {
-    sender: { email: brevoSender },
-    to: [{ email: brevoSender }],
-    subject: emailSubject,
-    htmlContent,
-  };
-
-  fetch("https://api.brevo.com/v3/smtp/email", {
+  fetch(`${API_URL}/send-email`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "api-key": brevoApiKey,
     },
-    body: JSON.stringify(payload),
+    body: JSON.stringify(data),
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Erreur d’envoi Brevo");
+        throw new Error("Erreur d’envoi");
       }
       return response.json();
     })
