@@ -297,6 +297,10 @@ for (const page of pages) {
     fail(`${page} must not contain the old 3-year experience claim`);
   }
 
+  if (!/<a\s+href="index\.html"\s+class="brand">GUI CONNECT<\/a>/.test(html)) {
+    fail(`${page} must link the brand name to the homepage`);
+  }
+
   const langButtons = html.match(/class="lang-btn/g) || [];
   if (langButtons.length !== 2) {
     fail(`${page} must contain exactly two language buttons`);
