@@ -174,6 +174,11 @@ const translations = {
     contactSuccessAlert: "Message envoyé avec succès.",
     contactBrevoFailAlert:
       "Impossible d’envoyer le message. Veuillez réessayer ou nous contacter par email.",
+    swalSuccessTitle: "Message envoyé !",
+    swalSuccessText: "Nous avons bien reçu votre demande et vous répondrons dans les plus brefs délais.",
+    swalErrorTitle: "Oups...",
+    swalErrorText: "Une erreur est survenue lors de l'envoi. Veuillez réessayer ou nous contacter par email.",
+    swalLoadingText: "Envoi en cours...",
   },
   en: {
     titleHome: "GUI CONNECT | Home",
@@ -347,6 +352,11 @@ const translations = {
     contactSuccessAlert: "Message sent successfully.",
     contactBrevoFailAlert:
       "Unable to send the message. Please try again or contact us by email.",
+    swalSuccessTitle: "Message Sent!",
+    swalSuccessText: "We have received your request and will get back to you shortly.",
+    swalErrorTitle: "Oops...",
+    swalErrorText: "An error occurred while sending. Please try again or contact us by email.",
+    swalLoadingText: "Sending...",
   },
 };
 
@@ -564,9 +574,22 @@ function handleContact(event) {
   };
 
   if (!data.name || !data.email || !data.service) {
-    alert(getTranslation("contactRequiredAlert"));
+    Swal.fire({
+      icon: "warning",
+      text: getTranslation("contactRequiredAlert"),
+      confirmButtonColor: "#3384ff",
+    });
     return;
   }
+
+  // Show loading state
+  Swal.fire({
+    title: getTranslation("swalLoadingText"),
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
 
   fetch(`${API_URL}/send-email`, {
     method: "POST",
@@ -577,16 +600,26 @@ function handleContact(event) {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Erreur d’envoi");
+        throw new Error("Network response was not ok");
       }
       return response.json();
     })
     .then(() => {
-      alert(getTranslation("contactSuccessAlert"));
+      Swal.fire({
+        icon: "success",
+        title: getTranslation("swalSuccessTitle"),
+        text: getTranslation("swalSuccessText"),
+        confirmButtonColor: "#3384ff",
+      });
       form.reset();
     })
     .catch((error) => {
-      console.error(error);
-      alert(getTranslation("contactBrevoFailAlert"));
+      console.error("Submission error:", error);
+      Swal.fire({
+        icon: "error",
+        title: getTranslation("swalErrorTitle"),
+        text: getTranslation("swalErrorText"),
+        confirmButtonColor: "#3384ff",
+      });
     });
 }
