@@ -162,19 +162,19 @@ const translations = {
     contactServiceHosting: "Hébergement & mail",
     contactMessageLabel: "Message",
     contactMessagePlaceholder: "Décrivez votre besoin",
-    contactSubmit: "Envoyer via Brevo",
+    contactSubmit: "Envoyer",
     contactNote:
-      "Aucune donnée n'est stockée ici. Brevo est utilisé pour l'envoi ou un fallback email est appliqué.",
+      "Aucune donnée n'est stockée ici. Votre demande est transmise directement à notre équipe.",
     contactRequiredAlert: "Veuillez remplir les champs obligatoires.",
     contactBrevoMissingAlert:
-      "Brevo n’est pas configuré. Le formulaire s’ouvrira en mode email.",
+      "Le formulaire s’ouvrira en mode email.",
     contactEmailSubject: "Contact GUI CONNECT",
     contactPhoneEmailLabel: "Téléphone",
     contactServiceEmailLabel: "Service",
     contactMessageEmailLabel: "Message",
     contactSuccessAlert: "Message envoyé avec succès.",
     contactBrevoFailAlert:
-      "Impossible d’envoyer via Brevo. Vérifiez la configuration.",
+      "Impossible d’envoyer le message. Veuillez réessayer ou nous contacter par email.",
   },
   en: {
     titleHome: "GUI CONNECT | Home",
@@ -335,19 +335,19 @@ const translations = {
     contactServiceHosting: "Hosting & email",
     contactMessageLabel: "Message",
     contactMessagePlaceholder: "Describe your needs",
-    contactSubmit: "Send via Brevo",
+    contactSubmit: "Send",
     contactNote:
-      "No data is stored here. Brevo is used for sending, or an email fallback is applied.",
+      "No data is stored here. Your request is sent directly to our team.",
     contactRequiredAlert: "Please fill the required fields.",
     contactBrevoMissingAlert:
-      "Brevo is not configured. The form will open in email mode.",
+      "The form will open in email mode.",
     contactEmailSubject: "GUI CONNECT contact",
     contactPhoneEmailLabel: "Phone",
     contactServiceEmailLabel: "Service",
     contactMessageEmailLabel: "Message",
     contactSuccessAlert: "Message sent successfully.",
     contactBrevoFailAlert:
-      "Unable to send via Brevo. Please check the configuration.",
+      "Unable to send the message. Please try again or contact us by email.",
   },
 };
 

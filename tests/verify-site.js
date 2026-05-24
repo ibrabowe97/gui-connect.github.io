@@ -244,6 +244,10 @@ if (!/\.feature-card,[\s\S]*\.contact-panel\s*{[\s\S]*box-shadow: var\(--content
   fail("Content cards must use the shared elevated content shadow");
 }
 
+if (!/body\.light-mode-active\s+\.lang-btn\s*{[\s\S]*color:\s*var\(--text-dark\)/.test(css)) {
+  fail("Light mode must set readable text color for inactive language buttons");
+}
+
 const responsiveRules = [
   {
     label: "prevent horizontal page overflow",
@@ -287,6 +291,27 @@ for (const key of sharedKeys) {
   for (const lang of ["fr", "en"]) {
     if (!translations[lang][key]) {
       fail(`Missing ${lang}.${key}`);
+    }
+  }
+}
+
+if (translations.fr.contactSubmit !== "Envoyer") {
+  fail("French contact submit button must use client-facing copy: Envoyer");
+}
+
+if (translations.en.contactSubmit !== "Send") {
+  fail("English contact submit button must use client-facing copy: Send");
+}
+
+for (const lang of ["fr", "en"]) {
+  for (const key of [
+    "contactSubmit",
+    "contactNote",
+    "contactBrevoMissingAlert",
+    "contactBrevoFailAlert",
+  ]) {
+    if (/brevo/i.test(translations[lang][key])) {
+      fail(`${lang}.${key} must not expose Brevo in client-facing copy`);
     }
   }
 }
