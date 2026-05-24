@@ -1,51 +1,82 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GUI CONNECT - Coming Soon</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GUI CONNECT | Accueil</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <button class="dark-mode" onclick="toggleDarkMode()">Mode Clair</button>
-    <div class="container">
-        <div class="title-container">
-            <h1><span class="highlight" data-text="GUI CONNECT">GUI CONNECT ARRIVE BIENTÔT</span></h1>
-        </div>
-        <p class="message" style="animation-delay: 0.4s">
-            Contactez-nous : 
-            <a href="mailto:contactus@gui-connect.com" class="contact-link">
-                contactus@gui-connect.com
-            </a>
-        </p>
-        <div class="separator"></div>
-    </div>
-    
-    <div class="footer-container">
-        <div class="footer-links">
-            <a href="#" class="footer-link">Conditions d'utilisation</a>
-            <span class="footer-separator">•</span>
-            <a href="#" class="footer-link">Mentions légales</a>
-        </div>
-        <span class="footer-separator">|</span>
-        <span>© 2025 GUI CONNECT. Tous droits réservés.</span>
-    </div>
 
-    <script>
-        function toggleDarkMode() {
-            document.body.classList.toggle('light-mode-active');
-            const button = document.querySelector('.dark-mode');
-            button.textContent = document.body.classList.contains('light-mode-active') 
-                ? 'Mode Sombre' 
-                : 'Mode Clair';
-        }
+    <header class="site-header">
+      <div class="brand">GUI CONNECT</div>
+      <nav class="site-nav">
+        <a href="index.html" class="active">Accueil</a>
+        <a href="services.html">Services</a>
+        <a href="about.html">À propos</a>
+        <a href="partners.html">Partenaires</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </header>
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const messages = document.querySelectorAll('.message');
-            messages.forEach((msg, index) => {
-                msg.style.animationDelay = `${0.2 + (index * 0.2)}s`;
-            });
-        });
-    </script>
-</body>
+    <main>
+      <section class="hero hero-home">
+        <div class="hero-content">
+          <p class="eyebrow">Agence IT & digitale</p>
+          <h1>Nous construisons des expériences numériques solides et professionnelles.</h1>
+          <p class="hero-text">
+            GUI CONNECT accompagne les entreprises dans la création, le développement et la maintenance de sites web, plateformes, applications mobiles et infrastructures IT.
+          </p>
+          <div class="hero-actions">
+            <a href="contact.html" class="btn btn-primary">Parlons de votre projet</a>
+            <a href="services.html" class="btn btn-secondary">Voir nos services</a>
+          </div>
+        </div>
+
+        <div class="hero-panel">
+          <div class="stat-card">
+            <span>3+</span>
+            <p>ans d'expérience dans la gestion d'équipes IT.</p>
+          </div>
+          <div class="stat-card">
+            <span>UK · EG · PK</span>
+            <p>équipes multiculturelles au Royaume-Uni, en Égypte et au Pakistan.</p>
+          </div>
+          <div class="stat-card">
+            <span>Clients</span>
+            <p>Guinée, Sénégal, UK, Nigeria et plus.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section-spotlight">
+        <div class="section-header">
+          <span>Ce que nous faisons</span>
+          <h2>Solutions digitales sur mesure</h2>
+        </div>
+        <div class="spotlight-grid">
+          <article class="spotlight-card">
+            <h3>Web & applications</h3>
+            <p>Sites vitrines, plateformes SaaS, applications React et Angular, UX soignée.</p>
+          </article>
+          <article class="spotlight-card">
+            <h3>Backend robuste</h3>
+            <p>Laravel, Spring Boot, Docker, PostgreSQL, Redis et Kafka pour un backend fiable.</p>
+          </article>
+          <article class="spotlight-card">
+            <h3>Support & infrastructure</h3>
+            <p>Maintenance poste, installation Office, messagerie, domaines et hébergement cloud.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div>GUI CONNECT — IT, web et mobile</div>
+      <a class="footer-link" href="contact.html">contactus@gui-connect.com</a>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
 </html>
