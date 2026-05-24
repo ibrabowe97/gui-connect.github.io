@@ -1,18 +1,106 @@
 const express = require("express");
 const cors = require("cors");
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUi = require("swagger-ui-express");
+const basicAuth = require("express-basic-auth");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
-app.use(cors()); // In production, you might want to restrict this to your domain
+app.use(cors());
 
-// Health check
+// --- Swagger Configuration ---
+const swaggerOptions = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "GUI CONNECT API",
+      version: "1.0.0",
+      description: "Secure backend bridge for the GUI CONNECT website.",
+    },
+    servers: [
+      {
+        url: process.env.NODE_ENV === "production" 
+          ? "https://api.gui-connect.com" 
+          : `http://localhost:${PORT}`,
+      },
+    ],
+  },
+  apis: ["./server.js"], // Paths to files containing OpenAPI definitions
+};
+
+const swaggerSpec = swaggerJsdoc(swaggerOptions);
+
+// --- Secure Docs Route ---
+const docsUser = process.env.DOCS_USER || "admin";
+const docsPass = process.env.DOCS_PASS || "gui-connect-2026";
+
+app.use(
+  "/docs",
+  basicAuth({
+    users: { [docsUser]: docsPass },
+    challenge: true,
+    realm: "GUI CONNECT API Documentation",
+  }),
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerSpec)
+);
+
+/**
+ * @openapi
+ * /health:
+ *   get:
+ *     summary: Health check endpoint
+ *     responses:
+ *       200:
+ *         description: API is running and healthy
+ *         content:
+ *           text/plain:
+ *             schema:
+ *               type: string
+ *               example: OK
+ */
 app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
+/**
+ * @openapi
+ * /send-email:
+ *   post:
+ *     summary: Send a contact email via Brevo
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - email
+ *               - service
+ *               - message
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               phone:
+ *                 type: string
+ *               service:
+ *                 type: string
+ *               message:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Email sent successfully
+ *       400:
+ *         description: Missing required fields
+ *       500:
+ *         description: Internal server error or configuration error
+ */
 app.post("/send-email", async (req, res) => {
   const { name, email, phone, service, message } = req.body;
   const brevoApiKey = process.env.BREVO_API_KEY;
