@@ -16,7 +16,7 @@ app.get("/health", (req, res) => {
 app.post("/send-email", async (req, res) => {
   const { name, email, phone, service, message } = req.body;
   const brevoApiKey = process.env.BREVO_API_KEY;
-  const brevoSender = process.env.BREVO_SENDER || "contactus@gui-connect.com";
+  const brevoSender = process.env.BREVO_SENDER || "ceo@gui-connect.com";
   const brevoRecipient = process.env.BREVO_RECIPIENT || brevoSender;
 
   if (!brevoApiKey) {
