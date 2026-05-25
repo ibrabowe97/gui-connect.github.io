@@ -138,6 +138,8 @@ const sharedKeys = [
   "themeLight",
   "themeDark",
   "footerTagline",
+  "footerBtnPartners",
+  "footerBtnContact",
 ];
 
 const projectUrls = [

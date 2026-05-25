@@ -49,6 +49,8 @@ const translations = {
     footerProjectMoreStack:
       "Laravel, Spring Boot, React, Angular, Docker, PostgreSQL, Redis, Kafka, Linux, Windows et outils collaboratifs.",
     footerTagline: "GUI CONNECT — informatique, web et mobile",
+    footerBtnPartners: "Partenaires",
+    footerBtnContact: "Nous contacter",
     homeEyebrow: "Agence informatique et digitale",
     homeHeroTitle:
       "Nous construisons des expériences numériques solides et professionnelles.",
@@ -228,6 +230,8 @@ const translations = {
     footerProjectMoreStack:
       "Laravel, Spring Boot, React, Angular, Docker, PostgreSQL, Redis, Kafka, Linux, Windows, and collaboration tooling.",
     footerTagline: "GUI CONNECT — IT, web and mobile",
+    footerBtnPartners: "Partners",
+    footerBtnContact: "Contact us",
     homeEyebrow: "IT and digital agency",
     homeHeroTitle: "We build strong, professional digital experiences.",
     homeHeroText:
