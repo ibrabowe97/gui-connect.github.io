@@ -1242,3 +1242,178 @@ body.light-mode-active textarea {
     align-items: flex-start;
   }
 }
+
+
+/* --- CLAUDE EDITORIAL REDESIGN OVERRIDES --- */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500&family=Inter:wght@400;500&display=swap');
+
+:root {
+  --primary: #cc785c;
+  --primary-active: #a9583e;
+  --canvas: #faf9f5;
+  --surface-card: #efe9de;
+  --surface-dark: #181715;
+  --ink: #141413;
+  --muted: #6c6a64;
+  --on-primary: #ffffff;
+  --on-dark: #faf9f5;
+  --hairline: #e6dfd8;
+  
+  --page-gradient-dark: var(--surface-dark);
+  --page-gradient-light: var(--canvas);
+  --content-surface: var(--surface-card);
+  --content-border: var(--hairline);
+  --content-shadow: none;
+  --glass-bg: transparent;
+  --glass-shadow: none;
+  --glass-border: var(--hairline);
+}
+
+body.light-mode-active {
+  --content-surface: var(--canvas);
+  --content-border: var(--hairline);
+  --glass-bg: transparent;
+  --glass-border: var(--hairline);
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  background: var(--canvas) !important;
+  color: var(--ink) !important;
+}
+
+body.light-mode-active {
+  background: var(--canvas) !important;
+  color: var(--ink) !important;
+}
+
+/* Flatten Glassmorphism */
+.stat-card, .spotlight-card, .feature-card, .detail-panel, .story-card, .partner-card, .contact-panel {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+  background-color: var(--surface-card) !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--hairline) !important;
+}
+
+.site-nav, .lang-switch, .theme-toggle, .nav-toggle {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+.site-header {
+  background: var(--canvas) !important;
+  border: none !important;
+  border-bottom: 1px solid var(--hairline) !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 2rem !important;
+}
+
+.site-nav a {
+  color: var(--muted) !important;
+  font-weight: 500;
+}
+.site-nav a.active, .site-nav a:hover {
+  color: var(--ink) !important;
+  background: transparent !important;
+}
+
+.brand {
+  color: var(--ink) !important;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+/* Typography Polish */
+h1, h2, h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 500;
+  color: var(--ink) !important;
+}
+h1 {
+  letter-spacing: -0.04em;
+}
+h2 {
+  letter-spacing: -0.02em;
+}
+
+.eyebrow, .section-header span, .footer-projects-header span {
+  font-family: 'Inter', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 500;
+  font-size: 0.75rem;
+  color: var(--primary) !important;
+}
+
+/* Buttons */
+.btn, .header-cta, .mobile-menu-cta {
+  border-radius: 8px !important;
+  font-weight: 500;
+  font-family: 'Inter', sans-serif;
+  box-shadow: none !important;
+  padding: 12px 20px !important;
+}
+
+.btn-primary, .header-cta, .mobile-menu-cta {
+  background: var(--primary) !important;
+  color: var(--on-primary) !important;
+}
+.btn-primary:hover, .header-cta:hover, .mobile-menu-cta:hover {
+  background: var(--primary-active) !important;
+}
+
+.btn-secondary {
+  background: transparent !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--ink) !important;
+}
+
+/* Footer & Dark Surfaces */
+.footer, .footer-projects {
+  background-color: var(--surface-dark) !important;
+  color: var(--on-dark) !important;
+  border: none !important;
+  border-radius: 0 !important;
+}
+.footer *, .footer-projects * {
+  color: var(--on-dark) !important;
+}
+.footer-projects-header span {
+  color: var(--primary) !important;
+}
+.footer-project-card {
+  background-color: #252320 !important; /* surface-dark-elevated */
+  border: none !important;
+  border-radius: 12px !important;
+}
+.footer-project-name {
+  color: var(--on-dark) !important;
+}
+.footer-project-name:hover {
+  color: var(--primary) !important;
+}
+
+/* Inputs */
+input, select, textarea {
+  border: 1px solid var(--hairline) !important;
+  background-color: var(--canvas) !important;
+  border-radius: 8px !important;
+  color: var(--ink) !important;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: var(--primary) !important;
+}
+
+/* Utilities */
+.text-coral { color: var(--primary) !important; }
+.bg-coral { background-color: var(--primary) !important; color: var(--on-primary) !important; }
+.bg-coral * { color: var(--on-primary) !important; }
