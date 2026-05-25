@@ -218,6 +218,8 @@ const scriptContext = createScriptContext();
 const translations = vm.runInContext("translations", scriptContext);
 const css = readFile("style.css");
 const server = readFile("api/server.js");
+const clientScript = readFile("script.js");
+const contactHtml = readFile("contact.html");
 
 const requiredServerSecurityRules = [
   {
@@ -392,6 +394,26 @@ if (translations.en.contactSubmit !== "Send") {
   fail("English contact submit button must use client-facing copy: Send");
 }
 
+const contactValidationKeys = [
+  "contactValidationTitle",
+  "contactValidationIntro",
+  "contactNameRequiredAlert",
+  "contactEmailRequiredAlert",
+  "contactEmailInvalidAlert",
+  "contactPhoneInvalidAlert",
+  "contactServiceRequiredAlert",
+  "contactMessageRequiredAlert",
+  "contactFieldTooLongAlert",
+];
+
+for (const lang of ["fr", "en"]) {
+  for (const key of contactValidationKeys) {
+    if (!translations[lang][key]) {
+      fail(`Missing ${lang}.${key}`);
+    }
+  }
+}
+
 for (const lang of ["fr", "en"]) {
   for (const key of [
     "contactSubmit",
@@ -403,6 +425,50 @@ for (const lang of ["fr", "en"]) {
       fail(`${lang}.${key} must not expose Brevo in client-facing copy`);
     }
   }
+}
+
+if (!/<form[\s\S]*id="contactForm"[\s\S]*novalidate/.test(contactHtml)) {
+  fail(
+    "contact.html contact form must disable native validation so SweetAlert handles all field errors",
+  );
+}
+
+for (const [fieldName, limit] of Object.entries({
+  name: 120,
+  email: 254,
+  phone: 40,
+  message: 3000,
+})) {
+  const pattern = new RegExp(`name="${fieldName}"[\\s\\S]*maxlength="${limit}"`);
+  if (!pattern.test(contactHtml)) {
+    fail(`contact.html ${fieldName} field must expose maxlength="${limit}"`);
+  }
+}
+
+if (!/function getContactValidationErrors\(/.test(clientScript)) {
+  fail("script.js must collect contact form field errors before submitting");
+}
+
+if (!/function showContactValidationErrors\(/.test(clientScript)) {
+  fail("script.js must display contact validation errors with SweetAlert");
+}
+
+if (
+  !/showGuiAlert\(\{[\s\S]*icon:\s*"warning"[\s\S]*html:/.test(clientScript)
+) {
+  fail("Contact validation SweetAlert must use themed HTML content for the full error list");
+}
+
+if (
+  /if\s*\(!data\.name\s*\|\|\s*!data\.email\s*\|\|\s*!data\.service\s*\|\|\s*!data\.message\s*\)/.test(
+    clientScript,
+  )
+) {
+  fail("script.js must not stop at the first generic required-field check");
+}
+
+if (!/aria-invalid/.test(clientScript)) {
+  fail("script.js must mark invalid contact fields for accessible visual feedback");
 }
 
 for (const page of pages) {
@@ -532,25 +598,32 @@ for (const page of pages) {
   }
 }
 
-if (/3\+|Trois ans|Three years/.test(readFile("script.js"))) {
+if (/3\+|Trois ans|Three years/.test(clientScript)) {
   fail("script.js must not contain the old 3-year experience claim");
 }
 
-if (!/if\s*\([^)]*!data\.message/.test(readFile("script.js"))) {
+if (
+  !/getContactValidationErrors[\s\S]*contactMessageRequiredAlert/.test(
+    clientScript,
+  )
+) {
   fail("script.js must validate message before submitting the contact form");
 }
 
-if (/confirmButtonColor:\s*"#3384ff"/.test(readFile("script.js"))) {
+if (/confirmButtonColor:\s*"#3384ff"/.test(clientScript)) {
   fail("SweetAlert feedback must not use the legacy blue confirm button");
 }
 
-if (!/function showGuiAlert\(/.test(readFile("script.js"))) {
+if (!/function showGuiAlert\(/.test(clientScript)) {
   fail("SweetAlert feedback must use the shared GUI CONNECT alert wrapper");
 }
 
 for (const snippet of [
+  "--error: #c64545",
   ".gui-swal-popup",
   ".gui-swal-confirm",
+  ".gui-swal-validation-list",
+  '[aria-invalid="true"]',
   "background: var(--primary)",
   "color: var(--ink)",
 ]) {
@@ -655,6 +728,55 @@ if (placeholderElement.placeholder !== translations.en.contactNamePlaceholder) {
 
 if (themeButton.textContent !== translations.en.themeLight) {
   fail("applyTranslations must update the theme toggle label");
+}
+
+function createContactTestField(value, validity = {}) {
+  return {
+    value,
+    validity,
+    attributes: {},
+    setAttribute(attribute, attributeValue) {
+      this.attributes[attribute] = attributeValue;
+    },
+    removeAttribute(attribute) {
+      delete this.attributes[attribute];
+    },
+  };
+}
+
+const getContactValidationErrors = vm.runInContext(
+  "getContactValidationErrors",
+  scriptContext,
+);
+const invalidContactForm = {
+  elements: {
+    name: createContactTestField(""),
+    email: createContactTestField("not-an-email", { typeMismatch: true }),
+    phone: createContactTestField("bad<>", { patternMismatch: true }),
+    service: createContactTestField(""),
+    message: createContactTestField(""),
+  },
+};
+const contactErrors = getContactValidationErrors(invalidContactForm, {
+  name: "",
+  email: "not-an-email",
+  phone: "bad<>",
+  service: "",
+  message: "",
+});
+
+if (contactErrors.length !== 5) {
+  fail(
+    "Contact validation must collect every invalid field in one SweetAlert pass",
+  );
+}
+
+for (const fieldName of ["name", "email", "phone", "service", "message"]) {
+  if (
+    invalidContactForm.elements[fieldName].attributes["aria-invalid"] !== "true"
+  ) {
+    fail(`Contact validation must mark ${fieldName} as aria-invalid`);
+  }
 }
 
 console.log("Static site i18n and header checks passed.");

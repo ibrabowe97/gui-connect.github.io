@@ -1,4 +1,10 @@
 const API_URL = "https://api.gui-connect.com";
+const CONTACT_FIELD_LIMITS = Object.freeze({
+  name: 120,
+  email: 254,
+  phone: 40,
+  message: 3000,
+});
 
 const translations = {
   fr: {
@@ -167,6 +173,16 @@ const translations = {
     contactNote:
       "Aucune donnée n'est stockée ici. Votre demande est transmise directement à notre équipe.",
     contactRequiredAlert: "Veuillez remplir les champs obligatoires.",
+    contactValidationTitle: "Vérifiez le formulaire",
+    contactValidationIntro: "Corrigez les champs suivants :",
+    contactNameRequiredAlert: "Le nom est obligatoire.",
+    contactEmailRequiredAlert: "L'email est obligatoire.",
+    contactEmailInvalidAlert: "L'email doit être valide.",
+    contactPhoneInvalidAlert:
+      "Le téléphone doit contenir uniquement des chiffres, espaces, parenthèses, tirets ou le signe +.",
+    contactServiceRequiredAlert: "Le service demandé est obligatoire.",
+    contactMessageRequiredAlert: "Le message est obligatoire.",
+    contactFieldTooLongAlert: "Ce champ doit contenir {max} caractères maximum.",
     contactBrevoMissingAlert:
       "Le formulaire s’ouvrira en mode email.",
     contactEmailSubject: "Contact GUI CONNECT",
@@ -347,6 +363,16 @@ const translations = {
     contactNote:
       "No data is stored here. Your request is sent directly to our team.",
     contactRequiredAlert: "Please fill the required fields.",
+    contactValidationTitle: "Check the form",
+    contactValidationIntro: "Fix the following fields:",
+    contactNameRequiredAlert: "Name is required.",
+    contactEmailRequiredAlert: "Email is required.",
+    contactEmailInvalidAlert: "Email must be valid.",
+    contactPhoneInvalidAlert:
+      "Phone can only include numbers, spaces, parentheses, hyphens, or the + sign.",
+    contactServiceRequiredAlert: "Requested service is required.",
+    contactMessageRequiredAlert: "Message is required.",
+    contactFieldTooLongAlert: "This field must be {max} characters or fewer.",
     contactBrevoMissingAlert:
       "The form will open in email mode.",
     contactEmailSubject: "GUI CONNECT contact",
@@ -612,22 +638,190 @@ function initPreferences() {
 
 document.addEventListener("DOMContentLoaded", initPreferences);
 
+function getContactField(form, fieldName) {
+  return form.elements ? form.elements[fieldName] : form[fieldName];
+}
+
+function getContactFieldValue(form, fieldName) {
+  const field = getContactField(form, fieldName);
+  return field && typeof field.value === "string" ? field.value.trim() : "";
+}
+
+function setContactFieldInvalid(field, isInvalid) {
+  if (!field || typeof field.setAttribute !== "function") {
+    return;
+  }
+
+  if (isInvalid) {
+    field.setAttribute("aria-invalid", "true");
+    return;
+  }
+
+  if (typeof field.removeAttribute === "function") {
+    field.removeAttribute("aria-invalid");
+  } else {
+    field.setAttribute("aria-invalid", "false");
+  }
+}
+
+function escapeAlertHtml(value) {
+  return String(value).replace(/[&<>"']/g, (character) => {
+    const entities = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      '"': "&quot;",
+      "'": "&#39;",
+    };
+    return entities[character];
+  });
+}
+
+function formatContactTooLongMessage(limit) {
+  return getTranslation("contactFieldTooLongAlert").replace("{max}", limit);
+}
+
+function getContactValidationErrors(form, data) {
+  const fields = {
+    name: getContactField(form, "name"),
+    email: getContactField(form, "email"),
+    phone: getContactField(form, "phone"),
+    service: getContactField(form, "service"),
+    message: getContactField(form, "message"),
+  };
+  const errors = [];
+  const invalidFields = new Set();
+
+  Object.values(fields).forEach((field) => setContactFieldInvalid(field, false));
+
+  const addError = (fieldName, labelKey, message) => {
+    const field = fields[fieldName];
+    errors.push({
+      field,
+      label: getTranslation(labelKey),
+      message,
+    });
+    if (field) {
+      invalidFields.add(field);
+    }
+  };
+
+  if (!data.name) {
+    addError(
+      "name",
+      "contactNameLabel",
+      getTranslation("contactNameRequiredAlert"),
+    );
+  }
+
+  if (!data.email) {
+    addError(
+      "email",
+      "contactEmailLabel",
+      getTranslation("contactEmailRequiredAlert"),
+    );
+  } else if (
+    fields.email &&
+    fields.email.validity &&
+    fields.email.validity.typeMismatch
+  ) {
+    addError(
+      "email",
+      "contactEmailLabel",
+      getTranslation("contactEmailInvalidAlert"),
+    );
+  }
+
+  if (
+    data.phone &&
+    fields.phone &&
+    fields.phone.validity &&
+    fields.phone.validity.patternMismatch
+  ) {
+    addError(
+      "phone",
+      "contactPhoneLabel",
+      getTranslation("contactPhoneInvalidAlert"),
+    );
+  }
+
+  if (!data.service) {
+    addError(
+      "service",
+      "contactServiceLabel",
+      getTranslation("contactServiceRequiredAlert"),
+    );
+  }
+
+  if (!data.message) {
+    addError(
+      "message",
+      "contactMessageLabel",
+      getTranslation("contactMessageRequiredAlert"),
+    );
+  }
+
+  for (const [fieldName, limit] of Object.entries(CONTACT_FIELD_LIMITS)) {
+    const field = fields[fieldName];
+    const isTooLong =
+      data[fieldName] &&
+      (data[fieldName].length > limit ||
+        (field && field.validity && field.validity.tooLong));
+
+    if (isTooLong) {
+      const labelKey = `contact${fieldName.charAt(0).toUpperCase()}${fieldName.slice(
+        1,
+      )}Label`;
+      addError(fieldName, labelKey, formatContactTooLongMessage(limit));
+    }
+  }
+
+  invalidFields.forEach((field) => setContactFieldInvalid(field, true));
+  return errors;
+}
+
+function showContactValidationErrors(errors) {
+  const listItems = errors
+    .map(
+      ({ label, message }) =>
+        `<li><strong>${escapeAlertHtml(label)}</strong><span>${escapeAlertHtml(
+          message,
+        )}</span></li>`,
+    )
+    .join("");
+
+  const alert = showGuiAlert({
+    icon: "warning",
+    title: getTranslation("contactValidationTitle"),
+    html: `<p class="gui-swal-validation-intro">${escapeAlertHtml(
+      getTranslation("contactValidationIntro"),
+    )}</p><ul class="gui-swal-validation-list">${listItems}</ul>`,
+  });
+
+  if (alert && typeof alert.then === "function") {
+    alert.then(() => {
+      const firstField = errors[0] && errors[0].field;
+      if (firstField && typeof firstField.focus === "function") {
+        firstField.focus();
+      }
+    });
+  }
+}
+
 function handleContact(event) {
   event.preventDefault();
   const form = event.target;
   const data = {
-    name: form.name.value.trim(),
-    email: form.email.value.trim(),
-    phone: form.phone.value.trim(),
-    service: form.service.value,
-    message: form.message.value.trim(),
+    name: getContactFieldValue(form, "name"),
+    email: getContactFieldValue(form, "email"),
+    phone: getContactFieldValue(form, "phone"),
+    service: getContactFieldValue(form, "service"),
+    message: getContactFieldValue(form, "message"),
   };
+  const validationErrors = getContactValidationErrors(form, data);
 
-  if (!data.name || !data.email || !data.service || !data.message) {
-    showGuiAlert({
-      icon: "warning",
-      text: getTranslation("contactRequiredAlert"),
-    });
+  if (validationErrors.length > 0) {
+    showContactValidationErrors(validationErrors);
     return;
   }
 

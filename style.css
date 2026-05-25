@@ -1255,6 +1255,7 @@ body.light-mode-active textarea {
   --surface-dark: #181715;
   --ink: #141413;
   --muted: #6c6a64;
+  --error: #c64545;
   --on-primary: #ffffff;
   --on-dark: #faf9f5;
   --on-dark-soft: #a09d96;
@@ -1414,6 +1415,13 @@ input:focus, select:focus, textarea:focus {
   border-color: var(--primary) !important;
 }
 
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: var(--error) !important;
+  box-shadow: 0 0 0 3px rgba(198, 69, 69, 0.14) !important;
+}
+
 /* SweetAlert2 follows the Claude-inspired editorial tokens */
 .gui-swal-popup {
   background: var(--canvas) !important;
@@ -1438,6 +1446,40 @@ input:focus, select:focus, textarea:focus {
   color: var(--muted) !important;
   font-size: 16px !important;
   line-height: 1.55 !important;
+}
+
+.gui-swal-validation-intro {
+  color: var(--muted) !important;
+  margin: 0 0 14px !important;
+  text-align: left !important;
+}
+
+.gui-swal-validation-list {
+  display: grid !important;
+  gap: 10px !important;
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  text-align: left !important;
+}
+
+.gui-swal-validation-list li {
+  background: var(--surface-card) !important;
+  border-left: 3px solid var(--error) !important;
+  border-radius: 8px !important;
+  color: var(--muted) !important;
+  padding: 10px 12px !important;
+}
+
+.gui-swal-validation-list strong {
+  color: var(--ink) !important;
+  display: block !important;
+  font-weight: 500 !important;
+  margin-bottom: 2px !important;
+}
+
+.gui-swal-validation-list span {
+  display: block !important;
 }
 
 .gui-swal-actions {

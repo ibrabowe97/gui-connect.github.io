@@ -106,6 +106,7 @@
         <form
           class="contact-form"
           id="contactForm"
+          novalidate
         >
           <div class="form-row">
             <div class="form-group">
@@ -114,6 +115,7 @@
                 type="text"
                 id="name"
                 name="name"
+                maxlength="120"
                 placeholder="Votre nom"
                 data-i18n-placeholder-key="contactNamePlaceholder"
                 required
@@ -125,6 +127,7 @@
                 type="email"
                 id="email"
                 name="email"
+                maxlength="254"
                 placeholder="contact@exemple.com"
                 required
               />
@@ -140,6 +143,9 @@
                 type="tel"
                 id="phone"
                 name="phone"
+                inputmode="tel"
+                maxlength="40"
+                pattern="[+0-9 ()-]{7,40}"
                 placeholder="+221 77 123 45 67"
               />
             </div>
@@ -174,6 +180,7 @@
             <textarea
               id="message"
               name="message"
+              maxlength="3000"
               rows="6"
               placeholder="Décrivez votre besoin"
               data-i18n-placeholder-key="contactMessagePlaceholder"
