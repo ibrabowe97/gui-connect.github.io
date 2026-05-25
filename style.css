@@ -1417,3 +1417,87 @@ input:focus, select:focus, textarea:focus {
 .text-coral { color: var(--primary) !important; }
 .bg-coral { background-color: var(--primary) !important; color: var(--on-primary) !important; }
 .bg-coral * { color: var(--on-primary) !important; }
+
+
+/* --- CLAUDE REFINEMENTS --- */
+
+/* Fix main text colors */
+body, body.light-mode-active {
+  color: var(--ink) !important;
+}
+
+h1, h2, h3, .brand {
+  color: var(--ink) !important;
+}
+
+/* Fix text inside cards */
+.stat-card p, .spotlight-card p, .feature-card p, .detail-panel p, .story-card p, .partner-card p, .contact-panel p {
+  color: var(--muted) !important;
+}
+.stat-card h3, .spotlight-card h3, .feature-card h3, .detail-panel h3, .story-card h3, .partner-card h3, .contact-panel h3 {
+  color: var(--ink) !important;
+}
+
+/* Fix buttons and language/theme switches */
+.lang-switch, .theme-toggle, .nav-toggle {
+  background-color: var(--surface-card) !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: 8px !important;
+  color: var(--ink) !important;
+}
+.lang-btn {
+  color: var(--muted) !important;
+  border-radius: 6px !important;
+}
+.lang-btn.active, .lang-btn:hover {
+  background: var(--canvas) !important;
+  color: var(--ink) !important;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05) !important;
+}
+
+/* Dark Mode handling for Claude's "Dark Surfaces" */
+/* Claude doesn't traditionally use a full dark mode, but uses dark sections. 
+   We'll ensure the existing dark mode maps cleanly to Claude's dark navy/ink. */
+body:not(.light-mode-active) {
+  --canvas: var(--surface-dark);
+  --surface-card: #252320; /* surface-dark-elevated */
+  --ink: var(--on-dark);
+  --muted: var(--on-dark-soft);
+  --hairline: #3d3d3a;
+}
+body:not(.light-mode-active) .btn-primary {
+  background: var(--primary) !important;
+  color: var(--on-primary) !important;
+}
+body:not(.light-mode-active) .btn-secondary {
+  border-color: var(--hairline) !important;
+  color: var(--ink) !important;
+}
+body:not(.light-mode-active) .lang-switch,
+body:not(.light-mode-active) .theme-toggle,
+body:not(.light-mode-active) .nav-toggle {
+  background-color: var(--surface-card) !important;
+  border-color: var(--hairline) !important;
+  color: var(--ink) !important;
+}
+body:not(.light-mode-active) .lang-btn.active {
+  background: var(--surface-dark) !important;
+  color: var(--ink) !important;
+}
+
+/* Fix Footer Text Legibility */
+.footer p, .footer a, .footer div, .footer-projects p {
+  color: var(--on-dark-soft) !important;
+}
+.footer h2, .footer h3, .footer-project-name {
+  color: var(--on-dark) !important;
+}
+.footer-link:hover, .footer-project-name:hover {
+  color: var(--primary) !important;
+}
+
+/* Form Labels */
+label {
+  color: var(--ink) !important;
+  font-weight: 500;
+}
