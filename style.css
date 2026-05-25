@@ -1596,3 +1596,27 @@ body:not(.light-mode-active) .footer-btn.btn-secondary {
 body:not(.light-mode-active) .footer-btn.btn-secondary:hover {
   background-color: #252320 !important;
 }
+
+
+/* --- MAP OLD VARIABLES TO CLAUDE DESIGN --- */
+:root {
+  --heading: var(--ink) !important;
+  --text-light: var(--ink) !important;
+  --text-dark: var(--ink) !important;
+  --text-muted: var(--muted) !important;
+  --content-muted: var(--muted) !important;
+  --accent: var(--primary) !important;
+  --accent-strong: var(--primary-active) !important;
+  
+  --bg-dark: var(--surface-dark) !important;
+  --bg-light: var(--canvas) !important;
+  --surface-light: var(--surface-card) !important;
+}
+
+body:not(.light-mode-active) {
+  --heading: var(--on-dark) !important;
+  --text-light: var(--on-dark) !important;
+  --text-dark: var(--on-dark) !important;
+  --text-muted: var(--on-dark-soft) !important;
+  --content-muted: var(--on-dark-soft) !important;
+}
