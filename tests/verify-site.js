@@ -249,6 +249,35 @@ if (!/body\.light-mode-active\s+\.lang-btn\s*{[\s\S]*color:\s*var\(--text-dark\)
   fail("Light mode must set readable text color for inactive language buttons");
 }
 
+const footerLightModeRules = [
+  {
+    label: "keep the footer panel on a light design surface in light mode",
+    pattern:
+      /body\.light-mode-active\s+\.footer-content\s*{[^}]*background-color:\s*var\(--surface-card\)/,
+  },
+  {
+    label: "use the muted light-surface footer text token in light mode",
+    pattern:
+      /body\.light-mode-active\s+\.footer-tagline\s*{[^}]*color:\s*var\(--muted\)/,
+  },
+  {
+    label: "keep primary footer CTA text on the primary button token in light mode",
+    pattern:
+      /body\.light-mode-active\s+\.footer-btn\.btn-primary\s*{[^}]*color:\s*var\(--on-primary\)/,
+  },
+  {
+    label: "keep secondary footer CTA text on the light surface ink token in light mode",
+    pattern:
+      /body\.light-mode-active\s+\.footer-btn\.btn-secondary\s*{[^}]*color:\s*var\(--ink\)/,
+  },
+];
+
+for (const { label, pattern } of footerLightModeRules) {
+  if (!pattern.test(css)) {
+    fail(`style.css must ${label}`);
+  }
+}
+
 const responsiveRules = [
   {
     label: "prevent horizontal page overflow",

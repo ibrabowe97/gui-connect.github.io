@@ -1257,6 +1257,7 @@ body.light-mode-active textarea {
   --muted: #6c6a64;
   --on-primary: #ffffff;
   --on-dark: #faf9f5;
+  --on-dark-soft: #a09d96;
   --hairline: #e6dfd8;
   
   --page-gradient-dark: var(--surface-dark);
@@ -1558,8 +1559,8 @@ label {
 }
 
 .footer-content {
-  background-color: var(--surface-card) !important;
-  border: 1px solid var(--hairline) !important;
+  background-color: var(--surface-dark) !important;
+  border: 1px solid #3d3d3a !important;
   border-radius: 12px !important;
   padding: 16px 24px !important;
   margin: 0 auto;
@@ -1571,32 +1572,18 @@ label {
   gap: 16px;
 }
 
-body:not(.light-mode-active) .footer-content {
-  background-color: #252320 !important; /* surface-dark-elevated */
-  border-color: #3d3d3a !important; /* hairline-dark */
-}
-
 .footer-tagline {
-  color: var(--muted) !important;
+  color: var(--on-dark-soft) !important;
 }
 
 .footer-btn.btn-secondary {
-  background-color: var(--canvas) !important;
-  color: var(--ink) !important;
-  border: 1px solid var(--hairline) !important;
+  background-color: #252320 !important; /* surface-dark-elevated */
+  color: var(--on-dark) !important;
+  border: 1px solid #3d3d3a !important;
 }
 .footer-btn.btn-secondary:hover {
-  background-color: var(--surface-card) !important;
+  background-color: #1f1e1b !important;
 }
-
-body:not(.light-mode-active) .footer-btn.btn-secondary {
-  background-color: var(--surface-dark) !important;
-  border-color: #3d3d3a !important;
-}
-body:not(.light-mode-active) .footer-btn.btn-secondary:hover {
-  background-color: #252320 !important;
-}
-
 
 /* --- MAP OLD VARIABLES TO CLAUDE DESIGN --- */
 :root {
@@ -1621,12 +1608,27 @@ body:not(.light-mode-active) {
   --content-muted: var(--on-dark-soft) !important;
 }
 
-
 /* --- FOOTER LIGHT MODE TEXT FIX --- */
-.footer-tagline {
+body.light-mode-active .footer-content {
+  background-color: var(--surface-card) !important;
+  border-color: var(--hairline) !important;
   color: var(--muted) !important;
 }
 
-body:not(.light-mode-active) .footer-tagline {
-  color: var(--on-dark-soft) !important;
+body.light-mode-active .footer-tagline {
+  color: var(--muted) !important;
+}
+
+body.light-mode-active .footer-btn.btn-primary {
+  color: var(--on-primary) !important;
+}
+
+body.light-mode-active .footer-btn.btn-secondary {
+  background-color: var(--canvas) !important;
+  border-color: var(--hairline) !important;
+  color: var(--ink) !important;
+}
+
+body.light-mode-active .footer-btn.btn-secondary:hover {
+  background-color: var(--surface-card) !important;
 }
