@@ -1,92 +1,134 @@
 # GUI CONNECT Website
 
-Instructional context for the **GUI CONNECT** hybrid application. This project is a professional showcase for an IT and digital services agency, utilizing a secure architecture to protect business credentials.
+Instructional context for the **GUI CONNECT** hybrid application. This project is a professional showcase for an IT and digital services agency with a static frontend and a secure backend bridge for contact email.
 
 ## Project Overview
 
-- **Purpose:** Professional showcase for IT services (web, mobile, infrastructure, support).
-- **Architecture:** Hybrid (Static Frontend + Node.js Backend API).
-- **Key Technologies:**
-  - **HTML5/CSS3:** Semantic structure with custom styling (glassmorphism).
-  - **Vanilla JavaScript:** Frontend logic, i18n, and SweetAlert2 integration.
-  - **Node.js (Express):** Backend API located in `/api` to securely handle transactional emails via Brevo.
+- **Purpose:** Showcase IT services, selected projects, resources, and contact entry points for GUI CONNECT.
+- **Architecture:** Hybrid static frontend plus Node.js Express backend API.
+- **Frontend:** HTML, CSS, and vanilla JavaScript served from the repository root.
+- **Backend:** Express API in `/api` that handles Brevo email delivery and protected Swagger documentation.
+- **Design:** Claude-inspired editorial system from `DESIGN.md`: cream canvas, coral actions, serif headings, compact cards, responsive navigation, and strict light-mode contrast.
 - **Hosting:** Hetzner VPS via Coolify.
-  - **Frontend:** `https://app.gui-connect.com`
-  - **Backend API:** `https://api.gui-connect.com`
-- **i18n:** All UI strings are stored in a `translations` object within `script.js`.
+  - Frontend: `https://app.gui-connect.com`
+  - Backend API: `https://api.gui-connect.com`
+- **i18n:** All UI strings live in the `translations` object in `script.js`.
 
 ## Project Structure
 
 ```text
 .
-├── api/                # Backend API (Secure Brevo Bridge)
-│   ├── package.json
-│   └── server.js
-├── index.html          # Homepage
-├── services.html       # Detailed service offerings
-├── about.html          # Company mission and experience
-├── resources.html      # Guides and resources
-├── partners.html       # Technical partners
-├── contact.html        # Contact form
-├── style.css           # Global styles and themes
-├── script.js           # Main logic (i18n, UI state, form handling)
-├── favicon.svg         # Brand initials favicon
-├── tests/
-│   └── verify-site.js  # Static site verification script
-├── AGENTS.md           # Internal agent instructions
-└── README.md           # Project documentation
+├── api/
+│   ├── package.json        # Express dependencies and npm start
+│   └── server.js           # Brevo bridge, /health, /send-email, /docs
+├── index.html              # Homepage and partner/provider section
+├── services.html           # Detailed service offerings
+├── resources.html          # Guides and resources
+├── projects.html           # Selected project showcase
+├── about.html              # Company mission and experience
+├── contact.html            # Contact form
+├── DESIGN.md               # Current visual design reference
+├── style.css               # Shared styles, tokens, responsive behavior
+├── script.js               # i18n, UI state, nav, form handling
+├── favicon.svg             # Brand initials favicon
+├── tests/verify-site.js    # Static site verification script
+├── AGENTS.md               # Agent instructions
+└── README.md               # Project documentation
 ```
 
 ## Building and Running
 
-### Development
-1. **Frontend:** Open any HTML file or run `python3 -m http.server 8000`.
-2. **Backend:** 
-   ```bash
-   cd api
-   npm install
-   BREVO_API_KEY=your_key node server.js
-   ```
+### Frontend
 
-### Deployment (Coolify)
+Serve the root directory:
 
-#### 1. Static Frontend
-- Create a **Static Site** resource in Coolify.
-- Base Directory: `/`.
-- Domain: `https://app.gui-connect.com`.
+```bash
+python3 -m http.server 8000
+```
 
-#### 2. Backend API
-- Create a **Node.js** resource in Coolify.
-- Base Directory: `/api`.
-- Start Command: `npm start`.
-- Domain: `https://api.gui-connect.com`.
-- **Environment Variables:**
-  - `BREVO_API_KEY`: Your private Brevo key.
-  - `BREVO_SENDER`: e.g., `ceo@gui-connect.com`.
-  - `BREVO_RECIPIENT`: e.g., `ceo@gui-connect.com`.
+### Backend
 
-### Testing & Verification
-The project includes a custom verification script that checks for missing i18n keys, nav consistency, and UI rules:
+Run from `/api`:
+
+```bash
+cd api
+npm install
+BREVO_API_KEY=your_key npm start
+```
+
+Backend endpoints:
+
+- `GET /health`
+- `POST /send-email`
+- `GET /docs` with basic auth
+
+Backend environment variables:
+
+- `PORT`: optional, defaults to `3000`.
+- `BREVO_API_KEY`: required for email sending.
+- `BREVO_SENDER`: optional sender email.
+- `BREVO_RECIPIENT`: optional recipient email.
+- `DOCS_USER`: optional Swagger docs username.
+- `DOCS_PASS`: Swagger docs password for deployment.
+
+## Deployment (Coolify)
+
+### Static Frontend
+
+- Resource type: Static Site
+- Base directory: `/`
+- Domain: `https://app.gui-connect.com`
+
+### Backend API
+
+- Resource type: Node.js
+- Base directory: `/api`
+- Start command: `npm start`
+- Domain: `https://api.gui-connect.com`
+- Required env: `BREVO_API_KEY`
+- Recommended env: `BREVO_SENDER`, `BREVO_RECIPIENT`, `DOCS_USER`, `DOCS_PASS`
+
+DNS uses a wildcard record pointing to the Hetzner server.
+
+## Testing & Verification
+
+Run these before committing or deploying:
+
 ```bash
 node tests/verify-site.js
+git diff --check
 ```
+
+`tests/verify-site.js` checks i18n coverage, nav order, header behavior, responsive menu rules, project links, footer light-mode colors, and CSS theme token usage.
 
 ## Development Conventions
 
-### 1. Internationalization (i18n)
-- **Do NOT** hardcode text in HTML files. Use `data-i18n-key` for text content or `data-i18n-placeholder-key` for placeholders.
-- Add new strings to the `translations` object in `script.js` for both `fr` and `en`.
+### 1. Internationalization
 
-### 2. Styling (CSS)
-- Use CSS variables defined in `:root` and `body.light-mode-active` for consistent theming.
-- Follow the "glass-style" design system for headers and cards.
-- **Responsive Design:** The site uses a breakpoint at `960px` for mobile/tablet layouts.
+- Do not hardcode new user-facing copy in HTML when it should be translated.
+- Use `data-i18n-key` for text content.
+- Use `data-i18n-placeholder-key` for form placeholders.
+- Add every new key to both `translations.fr` and `translations.en` in `script.js`.
 
-### 3. Contact Form
-- The frontend sends data to the Node.js backend (`/api/send-email`).
-- **Security:** The Brevo API key is NEVER exposed on the frontend. It is managed via server-side environment variables in Coolify.
-- **UI/UX**: Use `Swal.fire` (SweetAlert2) for all user feedback (loading, success, error).
+### 2. Page and Navigation Structure
 
-### 4. Page Structure
-- Every page must include the shared sticky header and the "footer project showcase" (`class="footer-projects"`).
-- Keep content focused by use case rather than building a single-page app.
+- Current pages are `index.html`, `services.html`, `resources.html`, `projects.html`, `about.html`, and `contact.html`.
+- There is no `partners.html`; partners/providers are a section on `index.html`.
+- Primary nav order is Home, Services, Resources, Projects, About.
+- Contact must remain a translated header CTA and mobile menu CTA, not a primary nav item.
+- Each page keeps the shared sticky header and compact footer CTA area.
+- `projects.html` owns the selected project grid.
+
+### 3. Styling
+
+- Follow `DESIGN.md` and the tokens in `style.css`.
+- Use the warm editorial design language: cream surfaces, coral CTAs, serif display headings, restrained borders, and compact cards.
+- Preserve readable light-mode contrast. Do not force dark footer/card panels in light mode unless a section is intentionally dark.
+- Keep the responsive breakpoint at `960px` unless the whole responsive system is updated intentionally.
+
+### 4. Contact Form and API
+
+- The frontend sends contact data to `https://api.gui-connect.com/send-email`.
+- API keys and credentials stay server-side in `/api`.
+- Use `Swal.fire` for loading, success, warning, and error feedback.
+- Do not expose Brevo or backend configuration details in user-facing frontend copy.
