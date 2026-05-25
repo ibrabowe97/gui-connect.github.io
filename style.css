@@ -1620,3 +1620,13 @@ body:not(.light-mode-active) {
   --text-muted: var(--on-dark-soft) !important;
   --content-muted: var(--on-dark-soft) !important;
 }
+
+
+/* --- FOOTER LIGHT MODE TEXT FIX --- */
+.footer-tagline {
+  color: var(--muted) !important;
+}
+
+body:not(.light-mode-active) .footer-tagline {
+  color: var(--on-dark-soft) !important;
+}
