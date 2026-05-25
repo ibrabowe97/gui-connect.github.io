@@ -8,7 +8,7 @@ const pages = [
   "services.html",
   "about.html",
   "resources.html",
-  "partners.html",
+  "projects.html",
   "contact.html",
 ];
 
@@ -33,6 +33,11 @@ const requiredKeysByPage = {
     "homeBackendText",
     "homeSupportTitle",
     "homeSupportText",
+    "partnersEyebrow",
+    "partnersHeroTitle",
+    "partnersHetznerText",
+    "partnersAwsText",
+    "partnersBrevoText",
   ],
   "services.html": [
     "servicesEyebrow",
@@ -79,15 +84,31 @@ const requiredKeysByPage = {
     "resourcesSupportTitle",
     "resourcesSupportText",
   ],
-  "partners.html": [
-    "partnersEyebrow",
-    "partnersHeroTitle",
-    "partnersLead",
-    "partnersRailwayText",
-    "partnersHetznerText",
-    "partnersAwsText",
-    "partnersBrevoText",
-  ],
+  "projects.html": [
+  "footerProjectsEyebrow",
+  "footerProjectsTitle",
+  "footerProjectsLead",
+  "footerProjectGoalLabel",
+  "footerProjectInfraLabel",
+  "footerProjectStackLabel",
+  "footerProjectAeesgsName",
+  "footerProjectAeesgsGoal",
+  "footerProjectAeesgsInfra",
+  "footerProjectAeesgsStack",
+  "footerProjectBudgetName",
+  "footerProjectBudgetGoal",
+  "footerProjectBudgetInfra",
+  "footerProjectBudgetStack",
+  "footerProjectCashminuteName",
+  "footerProjectCashminuteGoal",
+  "footerProjectCashminuteInfra",
+  "footerProjectCashminuteStack",
+  "footerProjectMoreName",
+  "footerProjectMoreGoal",
+  "footerProjectMoreInfra",
+  "footerProjectMoreStack"
+],
+
   "contact.html": [
     "contactEyebrow",
     "contactHeroTitle",
@@ -112,32 +133,10 @@ const sharedKeys = [
   "navServices",
   "navAbout",
   "navResources",
-  "navPartners",
+  "navProjects",
   "navContact",
   "themeLight",
   "themeDark",
-  "footerProjectsEyebrow",
-  "footerProjectsTitle",
-  "footerProjectsLead",
-  "footerProjectGoalLabel",
-  "footerProjectInfraLabel",
-  "footerProjectStackLabel",
-  "footerProjectAeesgsName",
-  "footerProjectAeesgsGoal",
-  "footerProjectAeesgsInfra",
-  "footerProjectAeesgsStack",
-  "footerProjectBudgetName",
-  "footerProjectBudgetGoal",
-  "footerProjectBudgetInfra",
-  "footerProjectBudgetStack",
-  "footerProjectCashminuteName",
-  "footerProjectCashminuteGoal",
-  "footerProjectCashminuteInfra",
-  "footerProjectCashminuteStack",
-  "footerProjectMoreName",
-  "footerProjectMoreGoal",
-  "footerProjectMoreInfra",
-  "footerProjectMoreStack",
   "footerTagline",
 ];
 
@@ -151,7 +150,7 @@ const expectedNavOrder = [
   "index.html",
   "services.html",
   "resources.html",
-  "partners.html",
+  "projects.html",
   "about.html",
 ];
 
@@ -390,19 +389,14 @@ for (const page of pages) {
     fail(`${page} theme toggle must keep a label for desktop and accessibility`);
   }
 
-  if (!html.includes('class="footer-projects"')) {
-    fail(`${page} must include the footer project showcase`);
-  }
-
-  for (const projectUrl of projectUrls) {
-    if (!html.includes(`href="${projectUrl}"`)) {
-      fail(`${page} must link to ${projectUrl} in the footer project showcase`);
+  if (page === 'projects.html') {
+    if (!html.includes('class="footer-project-grid"')) {
+      fail(`${page} must include the project showcase grid`);
     }
-  }
-
-  for (const key of sharedKeys.filter((key) => key.startsWith("footerProject"))) {
-    if (!html.includes(`data-i18n-key="${key}"`)) {
-      fail(`${page} missing footer project key "${key}"`);
+    for (const projectUrl of projectUrls) {
+      if (!html.includes(`href="${projectUrl}"`)) {
+        fail(`${page} must link to ${projectUrl} in the project showcase`);
+      }
     }
   }
 
