@@ -61,14 +61,15 @@ Useful local endpoints:
 - `POST /send-email` sends contact form submissions through Brevo.
 - `GET /docs` opens protected Swagger UI.
 
-Optional backend environment variables:
+Backend environment variables:
 
 - `PORT`: API port, default `3000`.
 - `BREVO_API_KEY`: required for sending email.
 - `BREVO_SENDER`: sender address, defaults to `ceo@gui-connect.com`.
 - `BREVO_RECIPIENT`: recipient address, defaults to `BREVO_SENDER`.
-- `DOCS_USER`: Swagger docs username, defaults to `admin`.
-- `DOCS_PASS`: Swagger docs password for non-local deployments.
+- `DOCS_USER`: Swagger docs username. Required when `NODE_ENV=production`.
+- `DOCS_PASS`: Swagger docs password. Required when `NODE_ENV=production`.
+- `ALLOWED_ORIGINS`: comma-separated browser origins allowed by CORS. Defaults to `https://app.gui-connect.com` and `https://api.gui-connect.com` in production and includes local development origins outside production.
 
 ## Verification
 
@@ -97,10 +98,20 @@ Coolify uses two resources from this repository:
    - Base directory: `/api`
    - Start command: `npm start`
    - Domain: `https://api.gui-connect.com`
-   - Required env: `BREVO_API_KEY`
-   - Recommended env: `BREVO_SENDER`, `BREVO_RECIPIENT`, `DOCS_USER`, `DOCS_PASS`
+   - Required env: `NODE_ENV=production`, `BREVO_API_KEY`, `DOCS_USER`, `DOCS_PASS`
+   - Recommended env: `BREVO_SENDER`, `BREVO_RECIPIENT`, `ALLOWED_ORIGINS`
 
-DNS uses a wildcard record pointing to the Hetzner server.
+DNS uses a wildcard record pointing to the Hetzner server. The reverse proxy must only route the intended hostnames (`app.gui-connect.com` and `api.gui-connect.com`) and should reject unknown `Host` headers.
+
+## Security Notes
+
+- `/send-email` is rate-limited in memory and validates field types, lengths, email format, and service values before sending to Brevo.
+- User-controlled contact fields are HTML-escaped before email rendering and a plain-text alternative is sent.
+- The API limits JSON bodies to `10kb`, restricts CORS, sets basic browser security headers, and times out outbound Brevo requests.
+- `/docs` has no production default password. Production startup fails unless `DOCS_USER` and `DOCS_PASS` are explicitly set.
+- Static pages define a baseline CSP/referrer policy and avoid inline event handlers.
+- Configure the frontend reverse proxy/static host to send `frame-ancestors 'none'` and HSTS headers; those cannot be enforced from HTML meta tags.
+- SweetAlert2 is pinned to an exact version with SHA-384 SRI on every HTML page.
 
 ## Development Standards
 
@@ -109,5 +120,6 @@ DNS uses a wildcard record pointing to the Hetzner server.
 - Follow `DESIGN.md` and the CSS variables in `style.css`. The current visual language is warm editorial: cream surfaces, coral actions, compact cards, and readable light-mode contrast.
 - Keep the breakpoint at `960px` unless the responsive system is updated deliberately.
 - Preserve the primary nav order: Home, Services, Resources, Projects, About. Contact stays as a header/mobile CTA, not a primary nav item.
-- Use SweetAlert2 (`Swal.fire`) for contact form feedback and user-visible status messages.
+- Do not add inline event handlers. Bind interactions from `script.js` so the page CSP can stay useful.
+- Use SweetAlert2 (`Swal.fire`) for contact form feedback and user-visible status messages. Keep its CDN URL exact and update the SRI hash whenever the version changes.
 - Run `node tests/verify-site.js` after changes to HTML, CSS, copy, navigation, i18n, or contact form behavior.

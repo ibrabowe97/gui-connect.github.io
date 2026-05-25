@@ -461,6 +461,26 @@ function toggleDarkMode() {
   );
 }
 
+function showGuiAlert(options) {
+  const designClasses = {
+    popup: "gui-swal-popup",
+    title: "gui-swal-title",
+    htmlContainer: "gui-swal-html",
+    confirmButton: "gui-swal-confirm",
+    actions: "gui-swal-actions",
+    loader: "gui-swal-loader",
+  };
+
+  return Swal.fire({
+    buttonsStyling: false,
+    ...options,
+    customClass: {
+      ...designClasses,
+      ...(options.customClass || {}),
+    },
+  });
+}
+
 function initHeaderAutoHide() {
   const header = document.querySelector(".site-header");
   if (!header) {
@@ -550,6 +570,31 @@ function initMobileMenu() {
   }
 }
 
+function initControls() {
+  document.querySelectorAll(".lang-btn[data-lang]").forEach((button) => {
+    if (typeof button.addEventListener === "function") {
+      button.addEventListener("click", () => switchLanguage(button.dataset.lang));
+    }
+  });
+
+  document.querySelectorAll(".lang-toggle").forEach((button) => {
+    if (typeof button.addEventListener === "function") {
+      button.addEventListener("click", toggleLanguage);
+    }
+  });
+
+  document.querySelectorAll(".theme-toggle").forEach((button) => {
+    if (typeof button.addEventListener === "function") {
+      button.addEventListener("click", toggleDarkMode);
+    }
+  });
+
+  const contactForm = document.querySelector("#contactForm");
+  if (contactForm && typeof contactForm.addEventListener === "function") {
+    contactForm.addEventListener("submit", handleContact);
+  }
+}
+
 function initPreferences() {
   const savedTheme = localStorage.getItem("guiConnectTheme");
   if (savedTheme === "light") {
@@ -560,6 +605,7 @@ function initPreferences() {
   );
   updateLanguageButtons(savedLang);
   applyTranslations(savedLang);
+  initControls();
   initHeaderAutoHide();
   initMobileMenu();
 }
@@ -577,17 +623,16 @@ function handleContact(event) {
     message: form.message.value.trim(),
   };
 
-  if (!data.name || !data.email || !data.service) {
-    Swal.fire({
+  if (!data.name || !data.email || !data.service || !data.message) {
+    showGuiAlert({
       icon: "warning",
       text: getTranslation("contactRequiredAlert"),
-      confirmButtonColor: "#3384ff",
     });
     return;
   }
 
   // Show loading state
-  Swal.fire({
+  showGuiAlert({
     title: getTranslation("swalLoadingText"),
     allowOutsideClick: false,
     didOpen: () => {
@@ -609,21 +654,19 @@ function handleContact(event) {
       return response.json();
     })
     .then(() => {
-      Swal.fire({
+      showGuiAlert({
         icon: "success",
         title: getTranslation("swalSuccessTitle"),
         text: getTranslation("swalSuccessText"),
-        confirmButtonColor: "#3384ff",
       });
       form.reset();
     })
     .catch((error) => {
       console.error("Submission error:", error);
-      Swal.fire({
+      showGuiAlert({
         icon: "error",
         title: getTranslation("swalErrorTitle"),
         text: getTranslation("swalErrorText"),
-        confirmButtonColor: "#3384ff",
       });
     });
 }

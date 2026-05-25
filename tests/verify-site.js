@@ -217,6 +217,65 @@ function createScriptContext() {
 const scriptContext = createScriptContext();
 const translations = vm.runInContext("translations", scriptContext);
 const css = readFile("style.css");
+const server = readFile("api/server.js");
+
+const requiredServerSecurityRules = [
+  {
+    label: "limit JSON request bodies",
+    pattern: /express\.json\(\s*{\s*limit:\s*"10kb"\s*}\s*\)/,
+  },
+  {
+    label: "avoid globally open CORS middleware",
+    pattern: /corsOptions/,
+  },
+  {
+    label: "not use bare app.use(cors())",
+    pattern: /app\.use\(cors\(\s*corsOptions\s*\)\)/,
+  },
+  {
+    label: "require docs credentials in production",
+    pattern:
+      /NODE_ENV\s*===\s*"production"[\s\S]*DOCS_USER[\s\S]*DOCS_PASS[\s\S]*throw new Error/,
+  },
+  {
+    label: "rate limit contact submissions",
+    pattern: /app\.post\("\/send-email",\s*rateLimitContact,/,
+  },
+  {
+    label: "validate contact payloads server-side",
+    pattern: /function validateContactPayload\(/,
+  },
+  {
+    label: "HTML-escape submitted contact fields",
+    pattern: /function escapeHtml\(/,
+  },
+  {
+    label: "send a plain-text email alternative",
+    pattern: /textContent,/,
+  },
+  {
+    label: "bound outbound Brevo requests with AbortController",
+    pattern: /new AbortController\(/,
+  },
+  {
+    label: "set API security headers",
+    pattern: /X-Content-Type-Options/,
+  },
+];
+
+if (/gui-connect-2026/.test(server)) {
+  fail("api/server.js must not contain source-visible docs credentials");
+}
+
+if (/app\.use\(cors\(\s*\)\)/.test(server)) {
+  fail("api/server.js must not allow every CORS origin");
+}
+
+for (const { label, pattern } of requiredServerSecurityRules) {
+  if (!pattern.test(server)) {
+    fail(`api/server.js must ${label}`);
+  }
+}
 
 const requiredThemeSnippets = [
   "--page-gradient-dark",
@@ -348,6 +407,30 @@ for (const lang of ["fr", "en"]) {
 
 for (const page of pages) {
   const html = readFile(page);
+  if (
+    !html.includes(
+      'src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js"',
+    ) ||
+    !html.includes(
+      'integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb"',
+    ) ||
+    !html.includes('crossorigin="anonymous"')
+  ) {
+    fail(`${page} must pin SweetAlert2 with SRI`);
+  }
+
+  if (!html.includes('http-equiv="Content-Security-Policy"')) {
+    fail(`${page} must define a Content Security Policy`);
+  }
+
+  if (!html.includes('name="referrer" content="strict-origin-when-cross-origin"')) {
+    fail(`${page} must define a strict referrer policy`);
+  }
+
+  if (/\son[a-z]+="/.test(html)) {
+    fail(`${page} must not use inline event handlers`);
+  }
+
   if (/3\+|Trois ans|Three years/.test(html)) {
     fail(`${page} must not contain the old 3-year experience claim`);
   }
@@ -408,11 +491,7 @@ for (const page of pages) {
     fail(`${page} must include Contact inside the mobile menu panel`);
   }
 
-  if (
-    !/<button[^>]+class="[^"]*lang-toggle[^"]*"[^>]+onclick="toggleLanguage\(\)"/.test(
-      html,
-    )
-  ) {
+  if (!/<button[^>]+class="[^"]*lang-toggle[^"]*"/.test(html)) {
     fail(`${page} must include a compact language icon toggle`);
   }
 
@@ -428,6 +507,12 @@ for (const page of pages) {
       if (!html.includes(`href="${projectUrl}"`)) {
         fail(`${page} must link to ${projectUrl} in the project showcase`);
       }
+    }
+  }
+
+  if (page === "contact.html") {
+    if (!/<textarea[\s\S]*name="message"[\s\S]*required/.test(html)) {
+      fail("contact.html message textarea must be required");
     }
   }
 
@@ -449,6 +534,29 @@ for (const page of pages) {
 
 if (/3\+|Trois ans|Three years/.test(readFile("script.js"))) {
   fail("script.js must not contain the old 3-year experience claim");
+}
+
+if (!/if\s*\([^)]*!data\.message/.test(readFile("script.js"))) {
+  fail("script.js must validate message before submitting the contact form");
+}
+
+if (/confirmButtonColor:\s*"#3384ff"/.test(readFile("script.js"))) {
+  fail("SweetAlert feedback must not use the legacy blue confirm button");
+}
+
+if (!/function showGuiAlert\(/.test(readFile("script.js"))) {
+  fail("SweetAlert feedback must use the shared GUI CONNECT alert wrapper");
+}
+
+for (const snippet of [
+  ".gui-swal-popup",
+  ".gui-swal-confirm",
+  "background: var(--primary)",
+  "color: var(--ink)",
+]) {
+  if (!css.includes(snippet)) {
+    fail(`style.css must include SweetAlert design styling: ${snippet}`);
+  }
 }
 
 if (

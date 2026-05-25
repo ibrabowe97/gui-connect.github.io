@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data:; connect-src 'self' https://api.gui-connect.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
     <title data-i18n-key="titleResources">GUI CONNECT | Ressources</title>
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.26.25/dist/sweetalert2.all.min.js" integrity="sha384-OLBgp1GsljhM2TJ+sbHjaiH9txEUvgdDTAzHv2P24donTt6/529l+9Ua0vFImLlb" crossorigin="anonymous"></script>
   </head>
   <body>
     <header class="site-header">
@@ -38,7 +40,6 @@
             class="lang-btn active"
             data-lang="fr"
             aria-pressed="true"
-            onclick="switchLanguage('fr')"
           >
             FR
           </button>
@@ -47,7 +48,6 @@
             class="lang-btn"
             data-lang="en"
             aria-pressed="false"
-            onclick="switchLanguage('en')"
           >
             EN
           </button>
@@ -55,7 +55,6 @@
         <button
           class="lang-toggle"
           type="button"
-          onclick="toggleLanguage()"
           aria-label="Changer de langue"
           title="Changer de langue"
         >
@@ -65,7 +64,6 @@
         <button
           class="theme-toggle"
           type="button"
-          onclick="toggleDarkMode()"
           aria-label="Mode Clair"
         >
           <span class="control-icon theme-icon" aria-hidden="true"></span>

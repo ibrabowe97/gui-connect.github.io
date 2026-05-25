@@ -1414,6 +1414,59 @@ input:focus, select:focus, textarea:focus {
   border-color: var(--primary) !important;
 }
 
+/* SweetAlert2 follows the Claude-inspired editorial tokens */
+.gui-swal-popup {
+  background: var(--canvas) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 18px 48px rgba(20, 20, 19, 0.12) !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
+  padding: 28px !important;
+}
+
+.gui-swal-title {
+  color: var(--ink) !important;
+  font-family: 'Cormorant Garamond', serif !important;
+  font-size: clamp(28px, 4vw, 36px) !important;
+  font-weight: 500 !important;
+  letter-spacing: -0.02em !important;
+  line-height: 1.15 !important;
+}
+
+.gui-swal-html {
+  color: var(--muted) !important;
+  font-size: 16px !important;
+  line-height: 1.55 !important;
+}
+
+.gui-swal-actions {
+  gap: 12px !important;
+}
+
+.gui-swal-confirm {
+  background: var(--primary) !important;
+  color: var(--on-primary) !important;
+  border-radius: 8px !important;
+  font-family: 'Inter', system-ui, sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  line-height: 1 !important;
+  padding: 12px 20px !important;
+}
+
+.gui-swal-confirm:hover {
+  background: var(--primary-active) !important;
+}
+
+.gui-swal-confirm:focus {
+  box-shadow: 0 0 0 3px rgba(204, 120, 92, 0.24) !important;
+}
+
+.gui-swal-loader {
+  border-color: var(--primary) transparent var(--primary) transparent !important;
+}
+
 /* Utilities */
 .text-coral { color: var(--primary) !important; }
 .bg-coral { background-color: var(--primary) !important; color: var(--on-primary) !important; }

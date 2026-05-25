@@ -68,8 +68,9 @@ Backend environment variables:
 - `BREVO_API_KEY`: required for email sending.
 - `BREVO_SENDER`: optional sender email.
 - `BREVO_RECIPIENT`: optional recipient email.
-- `DOCS_USER`: optional Swagger docs username.
-- `DOCS_PASS`: Swagger docs password for deployment.
+- `DOCS_USER`: Swagger docs username. Required when `NODE_ENV=production`.
+- `DOCS_PASS`: Swagger docs password. Required when `NODE_ENV=production`.
+- `ALLOWED_ORIGINS`: comma-separated browser origins allowed by CORS. Defaults to `https://app.gui-connect.com` and `https://api.gui-connect.com` in production.
 
 ## Deployment (Coolify)
 
@@ -85,10 +86,10 @@ Backend environment variables:
 - Base directory: `/api`
 - Start command: `npm start`
 - Domain: `https://api.gui-connect.com`
-- Required env: `BREVO_API_KEY`
-- Recommended env: `BREVO_SENDER`, `BREVO_RECIPIENT`, `DOCS_USER`, `DOCS_PASS`
+- Required env: `NODE_ENV=production`, `BREVO_API_KEY`, `DOCS_USER`, `DOCS_PASS`
+- Recommended env: `BREVO_SENDER`, `BREVO_RECIPIENT`, `ALLOWED_ORIGINS`
 
-DNS uses a wildcard record pointing to the Hetzner server.
+DNS uses a wildcard record pointing to the Hetzner server. Configure the reverse proxy to reject unknown `Host` headers and only route intended hostnames.
 
 ## Testing & Verification
 
@@ -100,6 +101,7 @@ git diff --check
 ```
 
 `tests/verify-site.js` checks i18n coverage, nav order, header behavior, responsive menu rules, project links, footer light-mode colors, and CSS theme token usage.
+It also includes security regression checks for CORS, docs credentials, contact validation, rate limiting, HTML escaping, body limits, outbound API timeout, and pinned SweetAlert2 SRI.
 
 ## Development Conventions
 
@@ -132,3 +134,8 @@ git diff --check
 - API keys and credentials stay server-side in `/api`.
 - Use `Swal.fire` for loading, success, warning, and error feedback.
 - Do not expose Brevo or backend configuration details in user-facing frontend copy.
+- Keep `/send-email` rate-limited, CORS-restricted, body-size-limited, and server-validated.
+- Escape all user-controlled values before rendering outbound HTML email.
+- Do not add inline event handlers; bind interactions from `script.js` to preserve CSP compatibility.
+- Keep SweetAlert2 pinned to an exact version with SRI; do not use floating CDN aliases.
+- Configure `frame-ancestors` and HSTS at the reverse proxy/static host; they cannot be enforced from HTML meta tags.

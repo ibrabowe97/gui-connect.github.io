@@ -33,7 +33,11 @@ This repository contains the **GUI CONNECT** showcase website and its secure bac
 - **Styling**: Follow `DESIGN.md` and the existing CSS variables. The current design is warm editorial: cream canvas, coral CTAs, serif display headings, compact cards, and careful light-mode contrast.
 - **Responsive behavior**: The main breakpoint is `960px`. Keep the hamburger nav, compact language toggle, and compact theme control aligned with the existing CSS and verification script.
 - **Footer**: The standard page footer is compact with CTA buttons. In light mode it must stay on light design surfaces; do not force black/dark footer panels unless the surrounding section is intentionally dark.
-- **Security**: Never put API keys, SMTP credentials, or docs passwords in frontend files. Use backend environment variables.
+- **Security**: Never put API keys, SMTP credentials, or docs passwords in frontend files. Use backend environment variables. Production API deployments require `NODE_ENV=production`, `BREVO_API_KEY`, `DOCS_USER`, and `DOCS_PASS`.
+- **API hardening**: Keep `/send-email` rate-limited, CORS-restricted, body-size-limited, and server-validated. Escape user input before composing HTML email.
+- **CSP compatibility**: Do not add inline `onclick`, `onsubmit`, or other `on*` handlers. Bind browser interactions in `script.js`.
+- **Third-party assets**: Keep SweetAlert2 pinned to an exact version with SRI. Do not revert to floating CDN versions like `@11`.
+- **Proxy headers**: Static-page `frame-ancestors` and HSTS must be configured at the reverse proxy/static host; HTML meta tags cannot enforce those headers.
 - **UI/UX**: Use SweetAlert2 (`Swal.fire`) for user feedback, loading states, success, and error messages.
 
 ## Development & Testing
@@ -48,6 +52,6 @@ This repository contains the **GUI CONNECT** showcase website and its secure bac
 - Deploying to Coolify requires two resources from the same repo:
   1. A **Static Site** for the root `/`.
   2. A **Node.js** resource for the `/api` directory.
-- Required API env var: `BREVO_API_KEY`.
-- Recommended API env vars: `BREVO_SENDER`, `BREVO_RECIPIENT`, `DOCS_USER`, `DOCS_PASS`.
-- DNS is configured with a wildcard `*` pointing to the Hetzner IP.
+- Required API env vars: `NODE_ENV=production`, `BREVO_API_KEY`, `DOCS_USER`, `DOCS_PASS`.
+- Recommended API env vars: `BREVO_SENDER`, `BREVO_RECIPIENT`, `ALLOWED_ORIGINS`.
+- DNS is configured with a wildcard `*` pointing to the Hetzner IP. Ensure the reverse proxy rejects unknown hostnames and only serves `app.gui-connect.com` and `api.gui-connect.com`.
