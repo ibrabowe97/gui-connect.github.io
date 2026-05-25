@@ -1548,3 +1548,51 @@ label {
 .footer-btn.btn-secondary:hover {
   background-color: #1f1e1b !important;
 }
+
+
+/* --- REFINED SMALL FOOTER --- */
+.footer {
+  background-color: transparent !important;
+  padding: 32px 0 !important;
+  border: none !important;
+}
+
+.footer-content {
+  background-color: var(--surface-card) !important;
+  border: 1px solid var(--hairline) !important;
+  border-radius: 12px !important;
+  padding: 16px 24px !important;
+  margin: 0 auto;
+  width: min(100%, 1180px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+body:not(.light-mode-active) .footer-content {
+  background-color: #252320 !important; /* surface-dark-elevated */
+  border-color: #3d3d3a !important; /* hairline-dark */
+}
+
+.footer-tagline {
+  color: var(--muted) !important;
+}
+
+.footer-btn.btn-secondary {
+  background-color: var(--canvas) !important;
+  color: var(--ink) !important;
+  border: 1px solid var(--hairline) !important;
+}
+.footer-btn.btn-secondary:hover {
+  background-color: var(--surface-card) !important;
+}
+
+body:not(.light-mode-active) .footer-btn.btn-secondary {
+  background-color: var(--surface-dark) !important;
+  border-color: #3d3d3a !important;
+}
+body:not(.light-mode-active) .footer-btn.btn-secondary:hover {
+  background-color: #252320 !important;
+}
